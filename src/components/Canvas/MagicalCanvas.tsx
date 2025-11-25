@@ -75,7 +75,7 @@ const AutoFitText = ({
 };
 
 interface MagicalCanvasProps {
-  stageRef: React.RefObject<Konva.Stage>;
+  stageRef: React.RefObject<Konva.Stage | null>;
 }
 
 export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
