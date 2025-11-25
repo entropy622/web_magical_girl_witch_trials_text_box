@@ -23,7 +23,7 @@ pnpm dev
 来启动项目
 
 ## Contribute
-如果你想交pr（虽然不太可能），请先fork然后交pr。
+如果你想交pr，请先fork然后交pr。
 额外注意：本项目使用了eslint和prettier做格式化，请在交pr千前
 ```
 eslint --fix

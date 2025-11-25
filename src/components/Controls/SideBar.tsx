@@ -3,6 +3,7 @@ import { useStore } from '../../store/useStore';
 import { CHARACTERS } from '../../data/characters';
 import { Download, RefreshCcw, Copy, Check } from 'lucide-react'; // 引入 Copy 和 Check 图标
 import clsx from 'clsx';
+import { GithubIcon } from '../../data/icons.tsx';
 
 interface SidebarProps {
   onDownload: () => void;
@@ -47,9 +48,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
       {/* 标题栏 */}
       <div className="p-4 md:p-6 bg-pink-500 text-white">
         <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-          <span>🎭</span> 魔女裁判文本生成器
+          魔女审判文本框生成器
         </h1>
-        <p className="text-pink-100 text-xs md:text-sm mt-1">Web 可视化版</p>
+        <p className="text-pink-100 text-xs md:text-sm mt-1 flex items-center gap-2">
+          <GithubIcon className={'size-6'}></GithubIcon>
+          <a
+            href="https://github.com/entropy622/web_magical_girl_witch_trials_text_box"
+            target="_blank"
+            rel="noreferrer"
+            className={'underline'}
+          >
+            仓库地址
+          </a>
+        </p>
       </div>
 
       <div className="p-4 md:p-6 space-y-6 md:space-y-8 flex-1">
