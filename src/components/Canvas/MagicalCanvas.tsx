@@ -82,10 +82,8 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
   const { selectedCharId, expressionIndex, bgIndex, textContent, isFontLoaded } = useStore();
   const charConfig = CHARACTERS[selectedCharId];
 
-  // 假设原始画布尺寸很大，我们在网页上需要缩放显示
-  // 原始素材似乎是基于背景图的尺寸，根据 main.py 里的坐标，宽度至少 2400
-  const CANVAS_WIDTH = 2500;
-  const CANVAS_HEIGHT = 1400; // 估算值，根据背景图实际比例调整
+  const CANVAS_WIDTH = 2560;
+  const CANVAS_HEIGHT = 834; // 估算值，根据背景图实际比例调整
   const SCALE = 0.4; // 预览时的缩放比例
 
   // 资源路径构建 (适配 GitHub Pages base url)
@@ -94,10 +92,10 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
     return path;
   };
 
-  const bgPath = getAssetPath(`/assets/backgrounds/c${bgIndex}.png`);
+  const bgPath = getAssetPath(`/assets/backgrounds/c${bgIndex}.webp`);
   // 注意：文件夹名称需要完全匹配 Python 生成的结构
   const charPath = getAssetPath(
-    `/assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).png`
+    `/assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).webp`
   );
 
   if (!isFontLoaded) {

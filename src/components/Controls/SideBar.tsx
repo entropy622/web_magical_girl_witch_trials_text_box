@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { CHARACTERS } from '../../data/characters';
-import { Download, RefreshCcw } from 'lucide-react';
+import { Download, RefreshCcw, Copy, Check } from 'lucide-react'; // 引入 Copy 和 Check 图标
 import clsx from 'clsx';
 
 interface SidebarProps {
   onDownload: () => void;
+  onCopy: () => Promise<void>; // 新增 prop
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
   const {
     selectedCharId,
     expressionIndex,
@@ -20,7 +21,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
     setText,
   } = useStore();
 
+  const [isCopying, setIsCopying] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+
   const currentChar = CHARACTERS[selectedCharId];
+
+  const handleCopyClick = async () => {
+    if (isCopying) return;
+    setIsCopying(true);
+    setCopySuccess(false);
+    try {
+      await onCopy();
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000); // 2秒后恢复图标
+    } catch (error) {
+      console.error('Copy failed', error);
+      alert('复制失败，请重试 (部分浏览器不支持此功能)');
+    } finally {
+      setIsCopying(false);
+    }
+  };
 
   return (
     <div className="w-full md:w-96 bg-white shadow-xl flex flex-col h-screen overflow-y-auto border-r border-gray-200">
@@ -32,6 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
       </div>
 
       <div className="p-6 space-y-8 flex-1">
+        {/* ... (角色选择、表情选择、背景选择代码保持不变，此处省略以节省篇幅，实际文件中请保留) ... */}
         {/* 1. 角色选择 */}
         <section>
           <label className="block text-sm font-bold text-gray-700 mb-3">选择角色</label>
@@ -84,10 +105,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
                   )}
                   title={`表情 ${idx}`}
                 >
-                  {/* 这里显示缩略图，实际项目可以用 img 标签加载 assets 下的小图 */}
-                  {/* 为了节省带宽，这里用色块或懒加载 */}
                   <img
-                    src={`/assets/characters/${selectedCharId}/${selectedCharId} (${idx}).png`}
+                    src={`/assets/characters/${selectedCharId}/${selectedCharId} (${idx}).webp`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     alt={`Exp ${idx}`}
@@ -114,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
                   )}
                 >
                   <img
-                    src={`/assets/backgrounds/c${idx}.png`}
+                    src={`/assets/backgrounds/c${idx}.webp`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -136,13 +155,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload }) => {
         </section>
       </div>
 
-      <div className="p-6 border-t border-gray-200 bg-gray-50">
+      <div className="p-6 border-t border-gray-200 bg-gray-50 flex gap-3">
+        {/* 下载按钮 */}
         <button
           onClick={onDownload}
-          className="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-xl shadow-lg flex items-center justify-center gap-2 text-lg font-bold transition-transform active:scale-95"
+          className="flex-1 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl shadow-sm flex items-center justify-center gap-2 font-bold transition-all active:scale-95"
+          title="保存为文件"
         >
-          <Download size={24} />
-          生成图片 (Save)
+          <Download size={20} />
+          保存
+        </button>
+
+        {/* 复制按钮 */}
+        <button
+          onClick={handleCopyClick}
+          disabled={isCopying}
+          className={clsx(
+            'flex-[2] py-3 text-white rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold transition-all active:scale-95',
+            copySuccess
+              ? 'bg-green-500 hover:bg-green-600'
+              : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700'
+          )}
+        >
+          {isCopying ? (
+            <span className="animate-pulse">复制中...</span>
+          ) : copySuccess ? (
+            <>
+              <Check size={20} /> 已复制!
+            </>
+          ) : (
+            <>
+              <Copy size={20} /> 复制到剪贴板
+            </>
+          )}
         </button>
       </div>
     </div>

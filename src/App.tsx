@@ -11,7 +11,6 @@ function App() {
 
   useEffect(() => {
     // 动态加载字体
-    // 注意：font3.ttf 必须存在于 public/assets/fonts/font3.ttf
     const font = new FontFace('MagicalFont', 'url(/assets/fonts/font3.ttf)');
 
     font
@@ -23,33 +22,72 @@ function App() {
       })
       .catch((err) => {
         console.error('Failed to load font:', err);
-        // 即使字体加载失败，也设置为 true 以便显示 Canvas（回退字体）
         setFontLoaded(true);
       });
   }, [setFontLoaded]);
 
+  // 通用导出逻辑：计算高清比例
+  const getHighResRatio = () => {
+    if (stageRef.current) {
+      const currentScale = stageRef.current.scaleX();
+      return 1 / currentScale; // 抵消缩放，还原 2560x834
+    }
+    return 1;
+  };
+
   const handleDownload = () => {
     if (stageRef.current) {
-      // 导出高分辨率图片
+      const pixelRatio = getHighResRatio();
       const uri = stageRef.current.toDataURL({
-        pixelRatio: 2, // 2倍图，更高清
+        pixelRatio: pixelRatio,
         mimeType: 'image/png',
       });
       saveAs(uri, `magical-trial-${Date.now()}.png`);
     }
   };
 
+  const handleCopy = async () => {
+    if (!stageRef.current) return;
+
+    try {
+      const pixelRatio = getHighResRatio();
+
+      // toBlob 是 konva 的原生方法，但 react-konva 的 ref 指向的是 Konva.Stage 实例
+      // 我们需要将其封装为 Promise 以便使用 async/await
+      const blob = await new Promise<Blob | null>((resolve) => {
+        stageRef.current?.toBlob({
+          callback: resolve,
+          mimeType: 'image/png',
+          pixelRatio: pixelRatio,
+        });
+      });
+
+      if (!blob) throw new Error('Canvas blob generation failed');
+
+      // 写入剪贴板
+      // 注意：这需要浏览器支持 ClipboardItem API (Chrome 66+, Safari 13.1+, Firefox 87+)
+      // 且必须在 HTTPS 或 localhost 环境下运行
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+    } catch (err) {
+      console.error('Copy to clipboard failed:', err);
+      throw err; // 抛出错误让 Sidebar 处理 UI 状态
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-hidden font-sans">
-      {/* 左侧控制栏 */}
-      <Sidebar onDownload={handleDownload} />
+      <Sidebar onDownload={handleDownload} onCopy={handleCopy} />
 
-      {/* 右侧画布区域 */}
-      <main className="flex-1 flex items-center justify-center p-4 md:p-10 bg-grid-pattern overflow-auto">
-        <MagicalCanvas stageRef={stageRef} />
+      <main className="flex-1 flex flex-col items-center justify-center p-4 bg-grid-pattern overflow-hidden relative">
+        <div className="w-full max-w-[1600px]">
+          <MagicalCanvas stageRef={stageRef} />
+        </div>
       </main>
 
-      {/* 简单的背景网格样式 */}
       <style>{`
         .bg-grid-pattern {
           background-color: #f3f4f6;
