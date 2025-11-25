@@ -19,7 +19,7 @@ export const useStore = create<AppState>((set) => ({
   selectedCharId: 'sherri', // 默认橘雪莉
   expressionIndex: 1,
   bgIndex: 1,
-  textContent: '在此输入文字...',
+  textContent: '请输入文本...',
   isFontLoaded: false,
 
   setCharacter: (id) => set({ selectedCharId: id, expressionIndex: 1 }), // 切换角色重置表情

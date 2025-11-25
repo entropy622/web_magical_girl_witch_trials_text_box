@@ -129,9 +129,9 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
     return path;
   };
 
-  const bgPath = getAssetPath(`/assets/backgrounds/c${bgIndex}.webp`);
+  const bgPath = getAssetPath(`assets/backgrounds/c${bgIndex}.webp`);
   const charPath = getAssetPath(
-    `/assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).webp`
+    `assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).webp`
   );
 
   if (!isFontLoaded) {

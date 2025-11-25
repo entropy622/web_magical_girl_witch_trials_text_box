@@ -118,7 +118,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
                   title={`表情 ${idx}`}
                 >
                   <img
-                    src={`/assets/characters/${selectedCharId}/${selectedCharId} (${idx}).webp`}
+                    src={`assets/characters/${selectedCharId}/${selectedCharId} (${idx}).webp`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     alt={`Exp ${idx}`}
@@ -147,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
                   )}
                 >
                   <img
-                    src={`/assets/backgrounds/c${idx}.webp`}
+                    src={`assets/backgrounds/c${idx}.webp`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />

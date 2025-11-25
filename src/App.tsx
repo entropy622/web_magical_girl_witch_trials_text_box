@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     // 动态加载字体
-    const font = new FontFace('MagicalFont', 'url(/assets/fonts/font3.ttf)');
+    const font = new FontFace('MagicalFont', 'url(assets/fonts/font3.ttf)');
 
     font
       .load()

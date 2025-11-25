@@ -20,8 +20,8 @@ pnpm install
 ```
 pnpm dev
 ```
-来启动项目
-
+来启动项目。
+默认端口是 http://localhost:5173/
 ```
 pnpm build
 ```
