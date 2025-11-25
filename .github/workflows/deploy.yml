@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   # 当推送到 main 分支时触发 (如果你是 master 分支，请改为 master)
   push:
-    branches: ["main"]
+    branches: ["master"]
 
   # 允许在 Actions 标签页手动触发
   workflow_dispatch:
