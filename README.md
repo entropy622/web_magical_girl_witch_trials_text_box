@@ -9,7 +9,7 @@ todo
 
 ## 本地运行 / 开发
 ### 技术栈
-react+vite+tailwind
+本项目是一个纯web项目，使用react+vite+tailwind+typescript开发。
 
 ### 运行
 clone本项目后
@@ -21,6 +21,11 @@ pnpm install
 pnpm dev
 ```
 来启动项目
+
+```
+pnpm build
+```
+来打包项目
 
 ## Contribute
 如果你想交pr，请先fork然后交pr。

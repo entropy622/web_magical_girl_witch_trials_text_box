@@ -22,6 +22,8 @@ const URLImage = ({
   return <KonvaImage image={image} x={x} y={y} width={width} height={height} />;
 };
 
+const INIT_FONT = 120;
+
 const AutoFitText = ({
   text,
   maxWidth,
@@ -40,7 +42,7 @@ const AutoFitText = ({
 
   useEffect(() => {
     if (textRef.current) {
-      let currentSize = 80;
+      let currentSize = INIT_FONT;
       textRef.current.fontSize(currentSize);
 
       while (textRef.current.height() > maxHeight && currentSize > 20) {
@@ -71,7 +73,7 @@ const AutoFitText = ({
 };
 
 interface MagicalCanvasProps {
-  stageRef: React.RefObject<Konva.Stage>;
+  stageRef: React.RefObject<Konva.Stage | null>;
 }
 
 export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
@@ -156,8 +158,8 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
         }}
       >
         <Stage
-          width={CANVAS_BASE.width}
-          height={CANVAS_BASE.height}
+          width={CANVAS_BASE.width * scale}
+          height={CANVAS_BASE.height * scale}
           scaleX={scale}
           scaleY={scale}
           ref={stageRef}
