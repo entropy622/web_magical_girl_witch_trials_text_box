@@ -2,6 +2,11 @@
 // 颜色格式转换辅助
 const rgb = (r: number, g: number, b: number) => `rgb(${r},${g},${b})`;
 
+export const CANVAS_BASE = {
+  width: 2560,
+  height: 834,
+};
+
 export interface CharacterConfig {
   id: string;
   name: string;

@@ -79,10 +79,19 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-hidden font-sans">
-      <Sidebar onDownload={handleDownload} onCopy={handleCopy} />
+    // md:h-screen md:overflow-hidden 保持桌面端原来的“应用式”布局。
+    <div className="flex flex-col md:flex-row min-h-screen md:h-screen bg-gray-100 md:overflow-hidden font-sans">
+      {/*
+         移动端: Sidebar order-2 (在下), Main order-1 (在上)
+         桌面端: Sidebar order-1 (在左), Main order-2 (在右)
+      */}
 
-      <main className="flex-1 flex flex-col items-center justify-center p-4 bg-grid-pattern overflow-hidden relative">
+      <div className="order-2 md:order-1 w-full md:w-auto z-10">
+        <Sidebar onDownload={handleDownload} onCopy={handleCopy} />
+      </div>
+
+      <main className="order-1 md:order-2 flex-1 flex flex-col items-center p-2 md:p-4 bg-grid-pattern relative md:overflow-hidden md:justify-center z-20 sticky top-0 md:static border-b md:border-b-0 border-gray-200 shadow-sm md:shadow-none">
+        {/* 移动端 Sticky 容器: 增加 sticky top-0 让预览图吸顶 */}
         <div className="w-full max-w-[1600px]">
           <MagicalCanvas stageRef={stageRef} />
         </div>

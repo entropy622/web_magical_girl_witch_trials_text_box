@@ -43,26 +43,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
   };
 
   return (
-    <div className="w-full md:w-96 bg-white shadow-xl flex flex-col h-screen overflow-y-auto border-r border-gray-200">
-      <div className="p-6 bg-pink-500 text-white">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
+    <div className="w-full md:w-96 bg-white shadow-xl flex flex-col h-auto md:h-full md:overflow-y-auto border-r border-gray-200 pb-10 md:pb-0">
+      {/* 标题栏 */}
+      <div className="p-4 md:p-6 bg-pink-500 text-white">
+        <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
           <span>🎭</span> 魔女裁判文本生成器
         </h1>
-        <p className="text-pink-100 text-sm mt-1">Web 可视化版</p>
+        <p className="text-pink-100 text-xs md:text-sm mt-1">Web 可视化版</p>
       </div>
 
-      <div className="p-6 space-y-8 flex-1">
-        {/* ... (角色选择、表情选择、背景选择代码保持不变，此处省略以节省篇幅，实际文件中请保留) ... */}
+      <div className="p-4 md:p-6 space-y-6 md:space-y-8 flex-1">
         {/* 1. 角色选择 */}
         <section>
-          <label className="block text-sm font-bold text-gray-700 mb-3">选择角色</label>
-          <div className="grid grid-cols-2 gap-2">
+          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">选择角色</label>
+          <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
             {Object.values(CHARACTERS).map((char) => (
               <button
                 key={char.id}
                 onClick={() => setCharacter(char.id)}
                 className={clsx(
-                  'px-4 py-2 text-sm rounded-md transition-all border',
+                  'px-2 md:px-4 py-2 text-xs md:text-sm rounded-md transition-all border',
                   selectedCharId === char.id
                     ? 'bg-pink-500 text-white border-pink-600 shadow-md'
                     : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-pink-50'
@@ -76,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
 
         {/* 2. 表情选择 */}
         <section>
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-2 md:mb-3">
             <label className="block text-sm font-bold text-gray-700">
               选择表情 ({expressionIndex})
             </label>
@@ -90,7 +90,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto p-1">
+          {/* 移动端: 显示更多列 (5列), 桌面端 (4列) */}
+          <div className="grid grid-cols-5 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-1">
             {Array.from({ length: currentChar.emotionCount }).map((_, i) => {
               const idx = i + 1;
               return (
@@ -119,8 +120,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
 
         {/* 3. 背景选择 */}
         <section>
-          <label className="block text-sm font-bold text-gray-700 mb-3">选择背景 ({bgIndex})</label>
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">
+            选择背景 ({bgIndex})
+          </label>
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {Array.from({ length: 16 }).map((_, i) => {
               const idx = i + 1;
               return (
@@ -145,33 +148,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
 
         {/* 4. 文本输入 */}
         <section>
-          <label className="block text-sm font-bold text-gray-700 mb-3">输入台词</label>
+          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
           <textarea
             value={textContent}
             onChange={(e) => setText(e.target.value)}
-            className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50"
+            className="w-full h-24 md:h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50 text-base"
             placeholder="在这里输入魔法少女的台词..."
           />
         </section>
       </div>
 
-      <div className="p-6 border-t border-gray-200 bg-gray-50 flex gap-3">
-        {/* 下载按钮 */}
+      <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50 flex gap-3">
         <button
           onClick={onDownload}
-          className="flex-1 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl shadow-sm flex items-center justify-center gap-2 font-bold transition-all active:scale-95"
-          title="保存为文件"
+          className="flex-1 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-xl shadow-sm flex items-center justify-center gap-2 font-bold transition-all active:scale-95 text-sm md:text-base"
         >
-          <Download size={20} />
+          <Download size={18} />
           保存
         </button>
 
-        {/* 复制按钮 */}
         <button
           onClick={handleCopyClick}
           disabled={isCopying}
           className={clsx(
-            'flex-[2] py-3 text-white rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold transition-all active:scale-95',
+            'flex-[2] py-3 text-white rounded-xl shadow-lg flex items-center justify-center gap-2 font-bold transition-all active:scale-95 text-sm md:text-base',
             copySuccess
               ? 'bg-green-500 hover:bg-green-600'
               : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700'
@@ -181,11 +181,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
             <span className="animate-pulse">复制中...</span>
           ) : copySuccess ? (
             <>
-              <Check size={20} /> 已复制!
+              <Check size={18} /> <span className="hidden sm:inline">已复制</span>
             </>
           ) : (
             <>
-              <Copy size={20} /> 复制到剪贴板
+              <Copy size={18} /> <span className="hidden sm:inline">复制</span>
             </>
           )}
         </button>
