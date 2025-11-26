@@ -7,6 +7,9 @@ interface AppState {
   textContent: string;
   isFontLoaded: boolean;
 
+  textAlign: 'left' | 'center' | 'right';
+  setTextAlign: (align: 'left' | 'center' | 'right') => void;
+
   // Actions
   setCharacter: (id: string) => void;
   setExpression: (index: number) => void;
@@ -21,10 +24,12 @@ export const useStore = create<AppState>((set) => ({
   bgIndex: 1,
   textContent: '请输入文本...',
   isFontLoaded: false,
+  textAlign: 'left',
 
   setCharacter: (id) => set({ selectedCharId: id, expressionIndex: 1 }), // 切换角色重置表情
   setExpression: (index) => set({ expressionIndex: index }),
   setBackground: (index) => set({ bgIndex: index }),
   setText: (text) => set({ textContent: text }),
   setFontLoaded: (loaded) => set({ isFontLoaded: loaded }),
+  setTextAlign: (align) => set({ textAlign: align }),
 }));

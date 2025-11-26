@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { CHARACTERS } from '../../data/characters';
-import { Download, RefreshCcw, Copy, Check } from 'lucide-react'; // 引入 Copy 和 Check 图标
+import {
+  Download,
+  RefreshCcw,
+  Copy,
+  Check,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+} from 'lucide-react'; // 引入 Copy 和 Check 图标
 import clsx from 'clsx';
 import { GithubIcon } from '../../data/icons.tsx';
 
@@ -16,10 +24,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
     expressionIndex,
     bgIndex,
     textContent,
+    textAlign,
     setCharacter,
     setExpression,
     setBackground,
     setText,
+    setTextAlign,
   } = useStore();
 
   const [isCopying, setIsCopying] = useState(false);
@@ -160,6 +170,46 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
         {/* 4. 文本输入 */}
         <section>
           <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
+          <div className="flex pb-2 rounded-lg">
+            <button
+              onClick={() => setTextAlign('left')}
+              className={clsx(
+                'p-1.5 rounded-md transition-all flex items-center justify-center',
+                textAlign === 'left'
+                  ? 'bg-white shadow text-pink-500'
+                  : 'text-gray-400 hover:text-gray-600'
+              )}
+              title="居左对齐"
+            >
+              <AlignLeft size={16} />
+            </button>
+            <div className="w-[1px] bg-gray-200 mx-1 h-4 self-center"></div>
+            <button
+              onClick={() => setTextAlign('center')}
+              className={clsx(
+                'p-1.5 rounded-md transition-all flex items-center justify-center',
+                textAlign === 'center'
+                  ? 'bg-white shadow text-pink-500'
+                  : 'text-gray-400 hover:text-gray-600'
+              )}
+              title="居中对齐"
+            >
+              <AlignCenter size={16} />
+            </button>
+            <div className="w-[1px] bg-gray-200 mx-1 h-4 self-center"></div>
+            <button
+              onClick={() => setTextAlign('right')}
+              className={clsx(
+                'p-1.5 rounded-md transition-all flex items-center justify-center',
+                textAlign === 'right'
+                  ? 'bg-white shadow text-pink-500'
+                  : 'text-gray-400 hover:text-gray-600'
+              )}
+              title="居右对齐"
+            >
+              <AlignRight size={16} />
+            </button>
+          </div>
           <textarea
             value={textContent}
             onChange={(e) => setText(e.target.value)}

@@ -30,12 +30,14 @@ const AutoFitText = ({
   maxHeight,
   x,
   y,
+  align,
 }: {
   text: string;
   maxWidth: number;
   maxHeight: number;
   x: number;
   y: number;
+  align: 'left' | 'center' | 'right';
 }) => {
   const textRef = useRef<Konva.Text>(null);
   const [fontSize, setFontSize] = useState(80);
@@ -66,7 +68,7 @@ const AutoFitText = ({
       stroke="black"
       strokeWidth={2}
       wrap="word"
-      align="center"
+      align={align}
       verticalAlign="middle"
     />
   );
@@ -77,7 +79,8 @@ interface MagicalCanvasProps {
 }
 
 export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
-  const { selectedCharId, expressionIndex, bgIndex, textContent, isFontLoaded } = useStore();
+  const { selectedCharId, expressionIndex, bgIndex, textContent, isFontLoaded, textAlign } =
+    useStore();
   const charConfig = CHARACTERS[selectedCharId];
   const containerRef = useRef<HTMLDivElement>(null);
   // 1. 初始值估算：根据窗口宽度预判 Canvas 缩放比例，防止第一帧画面过大或过小
@@ -202,6 +205,7 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
               y={TEXT_BOX_CONFIG.y}
               maxWidth={TEXT_BOX_CONFIG.width}
               maxHeight={TEXT_BOX_CONFIG.height}
+              align={textAlign}
             />
           </Layer>
         </Stage>
