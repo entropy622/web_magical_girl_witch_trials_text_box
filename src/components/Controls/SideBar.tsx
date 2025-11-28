@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { CHARACTERS } from '../../data/characters';
-import {
-  Download,
-  RefreshCcw,
-  Copy,
-  Check,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-} from 'lucide-react'; // 引入 Copy 和 Check 图标
+import { Download, Copy, Check, AlignLeft, AlignCenter, AlignRight } from 'lucide-react'; // 引入 Copy 和 Check 图标
 import clsx from 'clsx';
 import { GithubIcon } from '../../data/icons.tsx';
+import TextBoxController from './TextBoxController.tsx';
+import ControllerButton from './smallComponents/ControllerButton.tsx';
+import SketchController from './SketchController.tsx';
 
 interface SidebarProps {
   onDownload: () => void;
@@ -19,23 +13,10 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
-  const {
-    selectedCharId,
-    expressionIndex,
-    bgIndex,
-    textContent,
-    textAlign,
-    setCharacter,
-    setExpression,
-    setBackground,
-    setText,
-    setTextAlign,
-  } = useStore();
+  const { textContent, textAlign, setText, setTextAlign, layoutType, setLayoutType } = useStore();
 
   const [isCopying, setIsCopying] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-
-  const currentChar = CHARACTERS[selectedCharId];
 
   const handleCopyClick = async () => {
     if (isCopying) return;
@@ -74,100 +55,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
       </div>
 
       <div className="p-4 md:p-6 space-y-6 md:space-y-8 flex-1">
-        {/* 1. 角色选择 */}
         <section>
-          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">选择角色</label>
+          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">选择画布</label>
           <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
-            {Object.values(CHARACTERS).map((char) => (
-              <button
-                key={char.id}
-                onClick={() => setCharacter(char.id)}
-                className={clsx(
-                  'px-2 md:px-4 py-2 text-xs md:text-sm rounded-md transition-all border',
-                  selectedCharId === char.id
-                    ? 'bg-pink-500 text-white border-pink-600 shadow-md'
-                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-pink-50'
-                )}
-              >
-                {char.name}
-              </button>
-            ))}
+            <ControllerButton
+              text={'文本框'}
+              onClick={() => setLayoutType('text_box')}
+              highlight={layoutType === 'text_box'}
+            ></ControllerButton>
+            <ControllerButton
+              text={'安安画板'}
+              onClick={() => setLayoutType('sketchbook')}
+              highlight={layoutType === 'sketchbook'}
+            ></ControllerButton>
           </div>
         </section>
 
-        {/* 2. 表情选择 */}
-        <section>
-          <div className="flex justify-between items-center mb-2 md:mb-3">
-            <label className="block text-sm font-bold text-gray-700">
-              选择表情 ({expressionIndex})
-            </label>
-            <button
-              onClick={() =>
-                setExpression(Math.floor(Math.random() * currentChar.emotionCount) + 1)
-              }
-              className="text-xs flex items-center text-pink-500 hover:text-pink-700"
-            >
-              <RefreshCcw size={12} className="mr-1" /> 随机
-            </button>
-          </div>
+        {(() => {
+          switch (layoutType) {
+            case 'sketchbook':
+              return <SketchController></SketchController>;
+            case 'text_box':
+              return <TextBoxController></TextBoxController>;
+          }
+        })()}
 
-          {/* 移动端: 显示更多列 (5列), 桌面端 (4列) */}
-          <div className="grid grid-cols-5 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-1">
-            {Array.from({ length: currentChar.emotionCount }).map((_, i) => {
-              const idx = i + 1;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => setExpression(idx)}
-                  className={clsx(
-                    'aspect-square rounded-md overflow-hidden border-2 transition-all relative group',
-                    expressionIndex === idx
-                      ? 'border-pink-500 ring-2 ring-pink-200'
-                      : 'border-gray-200'
-                  )}
-                  title={`表情 ${idx}`}
-                >
-                  <img
-                    src={`assets/characters/${selectedCharId}/${selectedCharId} (${idx}).webp`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    alt={`Exp ${idx}`}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 3. 背景选择 */}
-        <section>
-          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">
-            选择背景 ({bgIndex})
-          </label>
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {Array.from({ length: 16 }).map((_, i) => {
-              const idx = i + 1;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => setBackground(idx)}
-                  className={clsx(
-                    'w-16 h-12 flex-shrink-0 rounded border-2 overflow-hidden',
-                    bgIndex === idx ? 'border-blue-500' : 'border-gray-200'
-                  )}
-                >
-                  <img
-                    src={`assets/backgrounds/c${idx}.webp`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 4. 文本输入 */}
+        {/*文本输入*/}
         <section>
           <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
           <div className="flex pb-2 rounded-lg">

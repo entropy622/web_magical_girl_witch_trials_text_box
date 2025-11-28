@@ -7,6 +7,7 @@ export const SKETCHBOOK_CONFIG = {
     width: 279,
     height: 175,
   },
+  emotionCount: 12,
   getImgPath: (index: number) => {
     return getAssetPath(`assets/anan_sketchbook/sketchbook (${index}).webp`);
   },
