@@ -23,9 +23,10 @@ export const parseRichText = (text: string): TextSegment[] => {
     const char = text[i];
     if (char === '[' || char === '【') {
       if (buffer) segments.push({ text: buffer, isHighlight });
-      buffer = '';
+      buffer = char;
       isHighlight = true;
     } else if (char === ']' || char === '】') {
+      buffer += char;
       if (buffer) segments.push({ text: buffer, isHighlight });
       buffer = '';
       isHighlight = false;
