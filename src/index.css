@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+@plugin "daisyui";
 /* 你的其他样式 */
 body {
   margin: 0;

@@ -46,3 +46,16 @@ pnpm build
 eslint --fix
 ```
 来格式化代码
+
+
+## 其他
+本项目使用以下命令将原素材转化为webp，大幅减少加载时间
+```
+Get-ChildItem -Recurse -Filter *.png | ForEach-Object {
+    $input = $_.FullName
+    $output = $_.FullName -replace '\.png$', '.webp'
+    Write-Host "Converting: $input -> $output"
+    ffmpeg -i "$input" -c:v libwebp -q:v 75 "$output" -hide_banner -loglevel error
+}
+```
+

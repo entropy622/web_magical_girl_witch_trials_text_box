@@ -1,86 +1,27 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Text, Group } from 'react-konva';
-import useImage from 'use-image';
-import { CHARACTERS, TEXT_BOX_CONFIG, CANVAS_BASE } from '../../data/characters';
+import React, { useRef, useState, useLayoutEffect } from 'react';
+import { Stage } from 'react-konva';
+import { CHARACTERS, getCanvasBase } from '../../data/characters';
 import { useStore } from '../../store/useStore';
 import Konva from 'konva';
-
-const URLImage = ({
-  src,
-  x,
-  y,
-  width,
-  height,
-}: {
-  src: string;
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-}) => {
-  const [image] = useImage(src);
-  return <KonvaImage image={image} x={x} y={y} width={width} height={height} />;
-};
-
-const INIT_FONT = 120;
-
-const AutoFitText = ({
-  text,
-  maxWidth,
-  maxHeight,
-  x,
-  y,
-  align,
-}: {
-  text: string;
-  maxWidth: number;
-  maxHeight: number;
-  x: number;
-  y: number;
-  align: 'left' | 'center' | 'right';
-}) => {
-  const textRef = useRef<Konva.Text>(null);
-  const [fontSize, setFontSize] = useState(80);
-
-  useEffect(() => {
-    if (textRef.current) {
-      let currentSize = INIT_FONT;
-      textRef.current.fontSize(currentSize);
-
-      while (textRef.current.height() > maxHeight && currentSize > 20) {
-        currentSize -= 2;
-        textRef.current.fontSize(currentSize);
-      }
-      setFontSize(currentSize);
-    }
-  }, [text, maxWidth, maxHeight]);
-
-  return (
-    <Text
-      ref={textRef}
-      text={text}
-      x={x}
-      y={y}
-      width={maxWidth}
-      fontSize={fontSize}
-      fontFamily="MagicalFont"
-      fill="white"
-      stroke="black"
-      strokeWidth={2}
-      wrap="word"
-      align={align}
-      verticalAlign="middle"
-    />
-  );
-};
+import TextBoxLayer from './TextBoxLayer.tsx';
 
 interface MagicalCanvasProps {
   stageRef: React.RefObject<Konva.Stage | null>;
 }
 
 export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
-  const { selectedCharId, expressionIndex, bgIndex, textContent, isFontLoaded, textAlign } =
-    useStore();
+  const {
+    selectedCharId,
+    expressionIndex,
+    bgIndex,
+    textContent,
+    isFontLoaded,
+    textAlign,
+    layoutType,
+  } = useStore();
+
+  const CANVAS_BASE = getCanvasBase(layoutType);
+
   const charConfig = CHARACTERS[selectedCharId];
   const containerRef = useRef<HTMLDivElement>(null);
   // 1. 初始值估算：根据窗口宽度预判 Canvas 缩放比例，防止第一帧画面过大或过小
@@ -167,47 +108,13 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
           scaleY={scale}
           ref={stageRef}
         >
-          <Layer>
-            <URLImage
-              src={bgPath}
-              x={0}
-              y={0}
-              width={CANVAS_BASE.width}
-              height={CANVAS_BASE.height}
-            />
-
-            <URLImage src={charPath} x={0} y={134} />
-
-            {charConfig.overlays.map((overlay, idx) => (
-              <Group key={idx}>
-                <Text
-                  text={overlay.text}
-                  x={overlay.position[0] + 2}
-                  y={overlay.position[1] + 2}
-                  fontSize={overlay.fontSize}
-                  fontFamily="MagicalFont"
-                  fill="black"
-                />
-                <Text
-                  text={overlay.text}
-                  x={overlay.position[0]}
-                  y={overlay.position[1]}
-                  fontSize={overlay.fontSize}
-                  fontFamily="MagicalFont"
-                  fill={overlay.color}
-                />
-              </Group>
-            ))}
-
-            <AutoFitText
-              text={textContent}
-              x={TEXT_BOX_CONFIG.x}
-              y={TEXT_BOX_CONFIG.y}
-              maxWidth={TEXT_BOX_CONFIG.width}
-              maxHeight={TEXT_BOX_CONFIG.height}
-              align={textAlign}
-            />
-          </Layer>
+          <TextBoxLayer
+            textContent={textContent}
+            textAlign={textAlign}
+            bgPath={bgPath}
+            charPath={charPath}
+            charConfig={charConfig}
+          ></TextBoxLayer>
         </Stage>
       </div>
     </div>

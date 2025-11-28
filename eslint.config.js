@@ -6,36 +6,56 @@ import tseslint from 'typescript-eslint'
 import prettierPlugin from 'eslint-plugin-prettier'
 import prettierConfig from 'eslint-config-prettier'
 
-export default tseslint.config(
-    { ignores: ['dist'] },
-    {
-        extends: [
-            js.configs.recommended,
-            ...tseslint.configs.recommended,
-            // 引入 Prettier 配置，放在最后以覆盖前面的样式规则
-            prettierConfig,
-        ],
-        files: ['**/*.{ts,tsx}'],
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
-        },
-        plugins: {
-            'react-hooks': reactHooks,
-            'react-refresh': reactRefresh,
-            'prettier': prettierPlugin, // 注册 prettier 插件
-        },
-        rules: {
-            ...reactHooks.configs.recommended.rules,
-            'react-refresh/only-export-components': [
-                'warn',
-                { allowConstantExport: true },
-            ],
-            // 开启 Prettier 规则：任何格式问题都会被视为 ESLint 错误
-            'prettier/prettier': 'error',
+// 👇 1. 引入插件
+import unusedImports from 'eslint-plugin-unused-imports'
 
-            // 你可以在这里添加自定义规则，例如：
-            // 'no-console': 'warn',
-        },
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      prettierConfig,
+    ],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
     },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      'prettier': prettierPlugin,
+      // 👇 2. 注册插件
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      'prettier/prettier': 'error',
+
+      // 👇 3. 关键配置开始 ==============================
+
+      // 必须关闭 TS 的默认规则，否则会和插件冲突，且 TS 默认规则不支持自动删除
+      '@typescript-eslint/no-unused-vars': 'off',
+
+      // 自动删除未使用的 import
+      'unused-imports/no-unused-imports': 'error',
+
+      // 自动删除未使用的变量
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_', // 忽略 _ 开头的变量
+          args: 'after-used',
+          argsIgnorePattern: '^_', // 忽略 _ 开头的参数
+        },
+      ],
+      // 关键配置结束 ====================================
+    },
+  },
 )
