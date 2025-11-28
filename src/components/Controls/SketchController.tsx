@@ -1,12 +1,10 @@
-import { CHARACTERS } from '../../data/characters.ts';
 import clsx from 'clsx';
 import { RefreshCcw } from 'lucide-react';
 import { useStore } from '../../store/useStore.ts';
 import { SKETCHBOOK_CONFIG } from '../../data/ananSketchbook.ts';
 
 export default function SketchController() {
-  const { selectedCharId, expressionIndex, setExpression, textContent, setText } = useStore();
-  const currentChar = CHARACTERS[selectedCharId];
+  const { expressionIndex, setExpression, textContent, setText } = useStore();
   return (
     <>
       {/* 2. 表情选择 */}
@@ -16,7 +14,9 @@ export default function SketchController() {
             选择表情 ({expressionIndex})
           </label>
           <button
-            onClick={() => setExpression(Math.floor(Math.random() * currentChar.emotionCount) + 1)}
+            onClick={() =>
+              setExpression(Math.floor(Math.random() * SKETCHBOOK_CONFIG.emotionCount) + 1)
+            }
             className="text-xs flex items-center text-pink-500 hover:text-pink-700"
           >
             <RefreshCcw size={12} className="mr-1" /> 随机

@@ -5,6 +5,7 @@ import Konva from 'konva';
 import TextBoxLayer from './TextBoxLayer.tsx';
 import { getCanvasBase } from '../../data/canvas.ts';
 import SketchbookLayer from './SketchbookLayer.tsx';
+import { isMobile } from '../../utils/isMobile.ts';
 
 interface MagicalCanvasProps {
   stageRef: React.RefObject<Konva.Stage | null>;
@@ -19,18 +20,29 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
   // 1. 初始值估算：根据窗口宽度预判 Canvas 缩放比例，防止第一帧画面过大或过小
   const [scale, setScale] = useState(() => {
     if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+
+      // --- 宽度计算 ---
       let availableWidth = window.innerWidth;
-      // 桌面端 (md breakpoint 768px): 减去侧边栏 (w-96 = 384px) 和一些 padding
-      if (window.innerWidth >= 768) {
-        availableWidth -= 384;
-        availableWidth -= 48;
+      // 桌面端: 减去侧边栏(384) + padding(48)
+      if (!isMobile) {
+        availableWidth -= 384 + 48;
       } else {
-        // 移动端: 减去 padding
+        // 移动端: 减去 padding(32)
         availableWidth -= 32;
       }
-      return Math.max(0.1, availableWidth / CANVAS_BASE.width);
+      const scaleW = availableWidth / CANVAS_BASE.width;
+
+      // --- 高度计算 ---
+      // 移动端限制为屏幕高度的 30%
+      // 桌面端限制为屏幕高度的 90%
+      const maxH = isMobile ? window.innerHeight * 0.3 : window.innerHeight * 0.9;
+      const scaleH = maxH / CANVAS_BASE.height;
+
+      // 取两者较小值，确保能同时放入宽和高
+      return Math.max(0.1, Math.min(scaleW, scaleH));
     }
-    return 0.5; // 服务端渲染或无法获取窗口时的兜底值
+    return 0.5;
   });
 
   // const [hasInit, setHasInit] = useState(false);
@@ -38,9 +50,20 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
     const updateSize = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
-        // 移动端减去较小的 padding (16)，桌面端保持
-        const newScale = containerWidth / CANVAS_BASE.width;
-        setScale(newScale);
+
+        // 只有宽度有效时才更新
+        if (containerWidth > 0) {
+          // 1. 基于宽度的缩放
+          const scaleW = containerWidth / CANVAS_BASE.width;
+          // 2. 基于高度的缩放 (新增逻辑)
+          // 移动端限制为 30vh, 桌面端限制为 90vh
+          const maxH = isMobile() ? window.innerHeight * 0.3 : window.innerHeight * 0.9;
+          const scaleH = maxH / CANVAS_BASE.height;
+          // 3. 取较小值 (Contain 模式)
+          // 这样既不会撑破宽度，也不会撑破高度
+          const newScale = Math.min(scaleW, scaleH);
+          setScale(newScale);
+        }
       }
     };
 
@@ -57,7 +80,7 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
       clearInterval(interval);
       window.removeEventListener('resize', updateSize);
     };
-  }, [CANVAS_BASE.width]);
+  }, [CANVAS_BASE.height, CANVAS_BASE.width]);
 
   if (!isFontLoaded) {
     return (
