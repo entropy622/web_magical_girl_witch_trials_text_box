@@ -39,7 +39,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
       {/* 标题栏 */}
       <div className="p-4 md:p-6 bg-pink-500 text-white">
         <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-          魔女审判文本框生成器
+          魔女审判表情包生成器
         </h1>
         <p className="text-pink-100 text-xs md:text-sm mt-1 flex items-center gap-2">
           <GithubIcon className={'size-6'}></GithubIcon>
@@ -64,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
               highlight={layoutType === 'text_box'}
             ></ControllerButton>
             <ControllerButton
-              text={'安安画板'}
+              text={'安安传话筒'}
               onClick={() => setLayoutType('sketchbook')}
               highlight={layoutType === 'sketchbook'}
             ></ControllerButton>

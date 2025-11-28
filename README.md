@@ -1,15 +1,18 @@
-# Web端的《魔法少女的魔女审判》的文本框生成器
+# Web端的《魔法少女的魔女审判》的表情包生成器
 
 ## 使用地址 https://entropy622.github.io/web_magical_girl_witch_trials_text_box/
 
 ## 特别感谢
-本项目基于
+本项目的文本框基于
 https://github.com/oplivilqo/Text_box-of-mahoushoujo_no_majosaiban
+安安传话筒基于
+https://github.com/MarkCup-Official/Anan-s-Sketchbook-Chat-Box
 
 ## 项目简介
-利用简洁清晰的界面来生成你的文本框
+利用简洁清晰的界面来生成你的魔审表情包
 ![img.png](img/img.png)
 ![img_1.png](img/img_1.png)
+![img.png](img/img_2.png)
 
 ### 功能
 - 简洁的界面
@@ -58,4 +61,5 @@ Get-ChildItem -Recurse -Filter *.png | ForEach-Object {
     ffmpeg -i "$input" -c:v libwebp -q:v 75 "$output" -hide_banner -loglevel error
 }
 ```
+
 

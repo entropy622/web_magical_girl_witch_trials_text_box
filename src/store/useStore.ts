@@ -41,5 +41,5 @@ export const useStore = create<AppState>((set) => ({
   setFontLoaded: (loaded) => set({ isFontLoaded: loaded }),
   setTextAlign: (align) => set({ textAlign: align }),
 
-  setLayoutType: (type) => set({ layoutType: type }),
+  setLayoutType: (type) => set({ layoutType: type, expressionIndex: 1 }),
 }));
