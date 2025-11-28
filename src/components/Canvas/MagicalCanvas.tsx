@@ -1,28 +1,20 @@
 import React, { useRef, useState, useLayoutEffect } from 'react';
 import { Stage } from 'react-konva';
-import { CHARACTERS, getCanvasBase } from '../../data/characters';
 import { useStore } from '../../store/useStore';
 import Konva from 'konva';
 import TextBoxLayer from './TextBoxLayer.tsx';
+import { getCanvasBase } from '../../data/canvas.ts';
+import SketchbookLayer from './SketchbookLayer.tsx';
 
 interface MagicalCanvasProps {
   stageRef: React.RefObject<Konva.Stage | null>;
 }
 
 export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
-  const {
-    selectedCharId,
-    expressionIndex,
-    bgIndex,
-    textContent,
-    isFontLoaded,
-    textAlign,
-    layoutType,
-  } = useStore();
+  const { isFontLoaded, layoutType } = useStore();
 
   const CANVAS_BASE = getCanvasBase(layoutType);
 
-  const charConfig = CHARACTERS[selectedCharId];
   const containerRef = useRef<HTMLDivElement>(null);
   // 1. 初始值估算：根据窗口宽度预判 Canvas 缩放比例，防止第一帧画面过大或过小
   const [scale, setScale] = useState(() => {
@@ -67,16 +59,7 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
       clearTimeout(timeout);
       window.removeEventListener('resize', updateSize);
     };
-  }, [hasInit]);
-
-  const getAssetPath = (path: string) => {
-    return path;
-  };
-
-  const bgPath = getAssetPath(`assets/backgrounds/c${bgIndex}.webp`);
-  const charPath = getAssetPath(
-    `assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).webp`
-  );
+  }, [CANVAS_BASE.width, hasInit]);
 
   if (!isFontLoaded) {
     return (
@@ -108,13 +91,14 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
           scaleY={scale}
           ref={stageRef}
         >
-          <TextBoxLayer
-            textContent={textContent}
-            textAlign={textAlign}
-            bgPath={bgPath}
-            charPath={charPath}
-            charConfig={charConfig}
-          ></TextBoxLayer>
+          {(() => {
+            switch (layoutType) {
+              case 'sketchbook':
+                return <SketchbookLayer></SketchbookLayer>;
+              case 'text_box':
+                return <TextBoxLayer></TextBoxLayer>;
+            }
+          })()}
         </Stage>
       </div>
     </div>

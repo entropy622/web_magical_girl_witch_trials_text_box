@@ -1,25 +1,25 @@
 import { Group, Layer, Text } from 'react-konva';
-import { CharacterConfig, TEXT_BOX_CANVAS_BASE, TEXT_BOX_CONFIG } from '../../data/characters.ts';
+import { CHARACTERS, TEXT_BOX_CONFIG } from '../../data/characters.ts';
 import AutoFitText from './AutoFitText.tsx';
 import { URLImage } from './URLImage.tsx';
+import { TEXT_BOX_CANVAS_BASE } from '../../data/canvas.ts';
+import { getAssetPath } from '../../utils/getAssetPath.ts';
+import { useStore } from '../../store/useStore.ts';
 
 export default function TextBoxLayer({
-  textContent,
-  textAlign,
-  bgPath,
-  charPath,
-  charConfig,
   width = TEXT_BOX_CANVAS_BASE.width,
   height = TEXT_BOX_CANVAS_BASE.height,
 }: {
-  textContent: string;
-  textAlign: 'left' | 'center' | 'right';
-  bgPath: string;
-  charPath: string;
-  charConfig: CharacterConfig;
   width?: number;
   height?: number;
 }) {
+  const { textContent, expressionIndex, bgIndex, textAlign, selectedCharId } = useStore();
+  const charConfig = CHARACTERS[selectedCharId];
+
+  const bgPath = getAssetPath(`assets/backgrounds/c${bgIndex}.webp`);
+  const charPath = getAssetPath(
+    `assets/characters/${charConfig.id}/${charConfig.id} (${expressionIndex}).webp`
+  );
   return (
     <Layer>
       <URLImage src={bgPath} x={0} y={0} width={width} height={height} />

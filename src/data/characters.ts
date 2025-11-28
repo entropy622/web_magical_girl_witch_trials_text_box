@@ -1,26 +1,7 @@
 // 移植自 main.py 和 text_configs_dict
 // 颜色格式转换辅助
-import { LayoutType } from '../store/useStore.ts';
 
 const rgb = (r: number, g: number, b: number) => `rgb(${r},${g},${b})`;
-
-export const TEXT_BOX_CANVAS_BASE = {
-  width: 2560,
-  height: 834,
-};
-export const SKETCHBOOK_CANVAS_BASE = {
-  width: 514,
-  height: 648,
-};
-
-export function getCanvasBase(layoutType: LayoutType) {
-  switch (layoutType) {
-    case 'text_box':
-      return TEXT_BOX_CANVAS_BASE;
-    case 'sketchbook':
-      return SKETCHBOOK_CANVAS_BASE;
-  }
-}
 
 export interface CharacterConfig {
   id: string;
