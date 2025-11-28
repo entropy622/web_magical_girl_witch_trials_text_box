@@ -57,7 +57,7 @@ export default function SketchController() {
           value={textContent}
           onChange={(e) => setText(e.target.value)}
           className="w-full h-24 md:h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50 text-base"
-          placeholder="在这里输入魔法少女的台词..."
+          placeholder="在这里输入魔法少女的台词，用【】包裹让文字变色"
         />
       </section>
     </>

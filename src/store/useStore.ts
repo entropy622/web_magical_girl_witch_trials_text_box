@@ -28,7 +28,7 @@ export const useStore = create<AppState>((set) => ({
   selectedCharId: 'sherri', // 默认橘雪莉
   expressionIndex: 1,
   bgIndex: 1,
-  textContent: '请输入文本...',
+  textContent: '',
   isFontLoaded: false,
   textAlign: 'left',
 
