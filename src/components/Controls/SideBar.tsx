@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
-import { Download, Copy, Check, AlignLeft, AlignCenter, AlignRight } from 'lucide-react'; // 引入 Copy 和 Check 图标
+import { Download, Copy, Check } from 'lucide-react'; // 引入 Copy 和 Check 图标
 import clsx from 'clsx';
 import { GithubIcon } from '../../data/icons.tsx';
 import TextBoxController from './TextBoxController.tsx';
@@ -13,7 +13,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
-  const { textContent, textAlign, setText, setTextAlign, layoutType, setLayoutType } = useStore();
+  const { layoutType, setLayoutType } = useStore();
 
   const [isCopying, setIsCopying] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
@@ -79,57 +79,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
               return <TextBoxController></TextBoxController>;
           }
         })()}
-
-        {/*文本输入*/}
-        <section>
-          <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
-          <div className="flex pb-2 rounded-lg">
-            <button
-              onClick={() => setTextAlign('left')}
-              className={clsx(
-                'p-1.5 rounded-md transition-all flex items-center justify-center',
-                textAlign === 'left'
-                  ? 'bg-white shadow text-pink-500'
-                  : 'text-gray-400 hover:text-gray-600'
-              )}
-              title="居左对齐"
-            >
-              <AlignLeft size={16} />
-            </button>
-            <div className="w-[1px] bg-gray-200 mx-1 h-4 self-center"></div>
-            <button
-              onClick={() => setTextAlign('center')}
-              className={clsx(
-                'p-1.5 rounded-md transition-all flex items-center justify-center',
-                textAlign === 'center'
-                  ? 'bg-white shadow text-pink-500'
-                  : 'text-gray-400 hover:text-gray-600'
-              )}
-              title="居中对齐"
-            >
-              <AlignCenter size={16} />
-            </button>
-            <div className="w-[1px] bg-gray-200 mx-1 h-4 self-center"></div>
-            <button
-              onClick={() => setTextAlign('right')}
-              className={clsx(
-                'p-1.5 rounded-md transition-all flex items-center justify-center',
-                textAlign === 'right'
-                  ? 'bg-white shadow text-pink-500'
-                  : 'text-gray-400 hover:text-gray-600'
-              )}
-              title="居右对齐"
-            >
-              <AlignRight size={16} />
-            </button>
-          </div>
-          <textarea
-            value={textContent}
-            onChange={(e) => setText(e.target.value)}
-            className="w-full h-24 md:h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50 text-base"
-            placeholder="在这里输入魔法少女的台词..."
-          />
-        </section>
       </div>
 
       <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50 flex gap-3">

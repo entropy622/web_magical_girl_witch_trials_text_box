@@ -3,10 +3,19 @@ import clsx from 'clsx';
 import { RefreshCcw } from 'lucide-react';
 import { useStore } from '../../store/useStore.ts';
 import ControllerButton from './smallComponents/ControllerButton.tsx';
+import AlignSwitcher from './smallComponents/AlignSwitcher.tsx';
 
 export default function TextBoxController() {
-  const { selectedCharId, expressionIndex, bgIndex, setCharacter, setExpression, setBackground } =
-    useStore();
+  const {
+    selectedCharId,
+    expressionIndex,
+    bgIndex,
+    setCharacter,
+    setExpression,
+    setBackground,
+    textContent,
+    setText,
+  } = useStore();
   const currentChar = CHARACTERS[selectedCharId];
   return (
     <>
@@ -92,6 +101,17 @@ export default function TextBoxController() {
             );
           })}
         </div>
+      </section>
+      {/*文本输入*/}
+      <section>
+        <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
+        <AlignSwitcher></AlignSwitcher>
+        <textarea
+          value={textContent}
+          onChange={(e) => setText(e.target.value)}
+          className="w-full h-24 md:h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50 text-base"
+          placeholder="在这里输入魔法少女的台词..."
+        />
       </section>
     </>
   );

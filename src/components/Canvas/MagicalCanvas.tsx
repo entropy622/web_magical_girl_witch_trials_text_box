@@ -28,19 +28,18 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
         // 移动端: 减去 padding
         availableWidth -= 32;
       }
-      // 限制在 0.1 ~ 1 之间
-      return Math.min(1, Math.max(0.1, availableWidth / CANVAS_BASE.width));
+      return Math.max(0.1, availableWidth / CANVAS_BASE.width);
     }
     return 0.5; // 服务端渲染或无法获取窗口时的兜底值
   });
 
-  const [hasInit, setHasInit] = useState(false);
+  // const [hasInit, setHasInit] = useState(false);
   useLayoutEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
         // 移动端减去较小的 padding (16)，桌面端保持
-        const newScale = Math.min(1, containerWidth / CANVAS_BASE.width);
+        const newScale = containerWidth / CANVAS_BASE.width;
         setScale(newScale);
       }
     };
@@ -48,8 +47,6 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    if (hasInit) return;
-    setHasInit(true);
     // 前 500ms 内每 100ms 检查一次，解决 React 刷新/热更新时 DOM 尚未完全排版导致 offsetWidth 为 0 或不准的问题
     const interval = setInterval(updateSize, 100);
     const timeout = setTimeout(() => {
@@ -57,9 +54,10 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
     }, 500);
     return () => {
       clearTimeout(timeout);
+      clearInterval(interval);
       window.removeEventListener('resize', updateSize);
     };
-  }, [CANVAS_BASE.width, hasInit]);
+  }, [CANVAS_BASE.width]);
 
   if (!isFontLoaded) {
     return (

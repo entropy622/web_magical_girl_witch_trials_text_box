@@ -5,7 +5,7 @@ import { useStore } from '../../store/useStore.ts';
 import { SKETCHBOOK_CONFIG } from '../../data/ananSketchbook.ts';
 
 export default function SketchController() {
-  const { selectedCharId, expressionIndex, setExpression } = useStore();
+  const { selectedCharId, expressionIndex, setExpression, textContent, setText } = useStore();
   const currentChar = CHARACTERS[selectedCharId];
   return (
     <>
@@ -49,6 +49,16 @@ export default function SketchController() {
             );
           })}
         </div>
+      </section>
+      <section>
+        <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">输入台词</label>
+        {/*<AlignSwitcher></AlignSwitcher>*/}
+        <textarea
+          value={textContent}
+          onChange={(e) => setText(e.target.value)}
+          className="w-full h-24 md:h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none resize-none bg-gray-50 text-base"
+          placeholder="在这里输入魔法少女的台词..."
+        />
       </section>
     </>
   );
