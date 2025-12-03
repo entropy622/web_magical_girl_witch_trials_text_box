@@ -6,13 +6,15 @@ import { GithubIcon } from '../../data/icons.tsx';
 import TextBoxController from './TextBoxController.tsx';
 import ControllerButton from './smallComponents/ControllerButton.tsx';
 import SketchController from './SketchController.tsx';
+import { ShareButton } from './ShareButton.tsx';
 
 interface SidebarProps {
   onDownload: () => void;
-  onCopy: () => Promise<void>; // 新增 prop
+  onCopy: () => Promise<void>;
+  onGenerateBlob: () => Promise<Blob | null>;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy, onGenerateBlob }) => {
   const { layoutType, setLayoutType } = useStore();
 
   const [isCopying, setIsCopying] = useState(false);
@@ -89,6 +91,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onDownload, onCopy }) => {
           <Download size={18} />
           保存
         </button>
+
+        <ShareButton
+          onGenerateBlob={onGenerateBlob}
+          className="flex-1 py-3 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white rounded-xl shadow-sm text-sm md:text-base"
+        />
 
         <button
           onClick={handleCopyClick}

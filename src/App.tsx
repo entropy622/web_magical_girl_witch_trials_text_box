@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { MagicalCanvas } from './components/Canvas/MagicalCanvas';
 import { useStore } from './store/useStore';
 import { saveAs } from 'file-saver';
@@ -34,6 +34,22 @@ function App() {
     }
     return 1;
   };
+
+  const generateBlob = useCallback(async (): Promise<Blob | null> => {
+    if (!stageRef.current) return null;
+
+    // 计算高清比例
+    const currentScale = stageRef.current.scaleX();
+    const pixelRatio = 1 / currentScale;
+
+    return new Promise((resolve) => {
+      stageRef.current?.toBlob({
+        callback: resolve,
+        mimeType: 'image/png',
+        pixelRatio: pixelRatio,
+      });
+    });
+  }, []);
 
   const handleDownload = () => {
     if (stageRef.current) {
@@ -87,7 +103,7 @@ function App() {
       */}
 
       <div className="order-2 md:order-1 w-full md:w-auto z-10">
-        <Sidebar onDownload={handleDownload} onCopy={handleCopy} />
+        <Sidebar onDownload={handleDownload} onCopy={handleCopy} onGenerateBlob={generateBlob} />
       </div>
 
       <main className="order-1 md:order-2 flex-1 flex flex-col items-center p-2 md:p-4 bg-grid-pattern relative md:overflow-hidden md:justify-center z-20 sticky top-0 md:static border-b md:border-b-0 border-gray-200 shadow-sm md:shadow-none">
