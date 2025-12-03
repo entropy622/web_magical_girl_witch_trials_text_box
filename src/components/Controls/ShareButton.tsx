@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Share2, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -14,15 +14,6 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
   text = '转发',
 }) => {
   const [loading, setLoading] = useState(false);
-  const [isSupported, setIsSupported] = useState(false);
-
-  useEffect(() => {
-    // 检测浏览器是否支持文件分享 (通常只有移动端或现代浏览器支持)
-    // 且必须在 HTTPS 或 localhost 环境下运行
-    if (typeof navigator !== 'undefined' && navigator.canShare()) {
-      setIsSupported(true);
-    }
-  }, []);
 
   const handleShare = async () => {
     if (loading) return;
@@ -58,9 +49,6 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
       setLoading(false);
     }
   };
-
-  // 如果不支持 Web Share API，直接不渲染该组件
-  if (!isSupported) return null;
 
   return (
     <button
