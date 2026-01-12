@@ -8,6 +8,10 @@ export const SKETCHBOOK_CANVAS_BASE = {
   width: 514,
   height: 648,
 };
+export const LUNPO_CANVAS_BASE = {
+  width: 2048,
+  height: 1152,
+};
 
 export function getCanvasBase(layoutType: LayoutType) {
   switch (layoutType) {
@@ -15,5 +19,7 @@ export function getCanvasBase(layoutType: LayoutType) {
       return TEXT_BOX_CANVAS_BASE;
     case 'sketchbook':
       return SKETCHBOOK_CANVAS_BASE;
+    case 'lunpo':
+      return LUNPO_CANVAS_BASE;
   }
 }

@@ -4,9 +4,11 @@ import { useStore } from './store/useStore';
 import { saveAs } from 'file-saver';
 import Konva from 'konva';
 import { Sidebar } from './components/Controls/SideBar.tsx';
+import { LunpoCanvasHandle } from './components/Lunpo/LunpoCanvas.tsx';
 
 function App() {
   const stageRef = useRef<Konva.Stage>(null);
+  const lunpoRef = useRef<LunpoCanvasHandle | null>(null);
   const { setFontLoaded } = useStore();
 
   useEffect(() => {
@@ -94,6 +96,10 @@ function App() {
     }
   };
 
+  const handleExportVideo = async () => {
+    await lunpoRef.current?.exportWebm();
+  };
+
   return (
     // md:h-screen md:overflow-hidden 保持桌面端原来的“应用式”布局。
     <div className="flex flex-col md:flex-row min-h-screen md:h-screen bg-gray-100 md:overflow-hidden font-sans">
@@ -103,13 +109,18 @@ function App() {
       */}
 
       <div className="order-2 md:order-1 w-full md:w-auto z-10">
-        <Sidebar onDownload={handleDownload} onCopy={handleCopy} onGenerateBlob={generateBlob} />
+        <Sidebar
+          onDownload={handleDownload}
+          onCopy={handleCopy}
+          onGenerateBlob={generateBlob}
+          onExportVideo={handleExportVideo}
+        />
       </div>
 
       <main className="order-1 md:order-2 flex-1 flex flex-col items-center p-2 md:p-4 bg-grid-pattern relative md:overflow-hidden md:justify-center z-20 sticky top-0 md:static border-b md:border-b-0 border-gray-200 shadow-sm md:shadow-none">
         {/* 移动端 Sticky 容器: 增加 sticky top-0 让预览图吸顶 */}
         <div className="w-full max-w-[1600px]">
-          <MagicalCanvas stageRef={stageRef} />
+          <MagicalCanvas stageRef={stageRef} lunpoRef={lunpoRef} />
         </div>
       </main>
 

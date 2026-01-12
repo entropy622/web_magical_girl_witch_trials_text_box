@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "app": "After Effects",
+  "comp": {
+    "name": "总-艾玛1",
+    "width": 2048,
+    "height": 1152,
+    "duration": 5.03333333333333,
+    "frameRate": 30,
+    "bgColor": [
+      0,
+      0,
+      0
+    ],
+    "layers": [
+      {
+        "index": 1,
+        "name": "RefuteCutIn_Ema_001.png",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 1,
+        "outPoint": 6.03333333333333,
+        "startTime": 1,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "RefuteCutIn_Ema_001.png",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-Ema\\RefuteCutIn_Ema_001.png",
+          "hasAlpha": true,
+          "width": 1472,
+          "height": 2048,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              736,
+              1024,
+              0
+            ]
+          },
+          "position": {
+            "keys": [
+              {
+                "time": 1,
+                "value": [
+                  1271.38775634766,
+                  639,
+                  0
+                ],
+                "inInterp": "BEZIER",
+                "outInterp": "BEZIER",
+                "inEase": [
+                  {
+                    "speed": 0,
+                    "influence": 100
+                  }
+                ],
+                "outEase": [
+                  {
+                    "speed": 675.156005859375,
+                    "influence": 16.666666667
+                  }
+                ]
+              },
+              {
+                "time": 2,
+                "value": [
+                  890,
+                  639,
+                  0
+                ],
+                "inInterp": "BEZIER",
+                "outInterp": "BEZIER",
+                "inEase": [
+                  {
+                    "speed": 0,
+                    "influence": 100
+                  }
+                ],
+                "outEase": [
+                  {
+                    "speed": 0,
+                    "influence": 16.666666667
+                  }
+                ]
+              }
+            ]
+          },
+          "scale": {
+            "static": [
+              59,
+              59,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          
+        ]
+      },
+      {
+        "index": 2,
+        "name": "Hiro_CutIn_StainedGlass_luminescence001.png",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 2,
+        "outPoint": 2.06666666666667,
+        "startTime": -0.13333333333333,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "Hiro_CutIn_StainedGlass_luminescence001.png",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-hiro\\Hiro_CutIn_StainedGlass_luminescence001.png",
+          "hasAlpha": false,
+          "width": 2048,
+          "height": 883,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              441.5,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1071,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              134,
+              134,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          {
+            "name": "颜色键",
+            "matchName": "ADBE Color Key",
+            "enabled": true,
+            "properties": [
+              {
+                "name": "主色",
+                "matchName": "ADBE Color Key-0001",
+                "enabled": true,
+                "value": {
+                  "static": [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "颜色容差",
+                "matchName": "ADBE Color Key-0002",
+                "enabled": true,
+                "value": {
+                  "static": 222
+                }
+              },
+              {
+                "name": "薄化边缘",
+                "matchName": "ADBE Color Key-0003",
+                "enabled": true,
+                "value": {
+                  "static": 0
+                }
+              },
+              {
+                "name": "羽化边缘",
+                "matchName": "ADBE Color Key-0004",
+                "enabled": true,
+                "value": {
+                  "static": 0
+                }
+              },
+              {
+                "name": "合成选项",
+                "matchName": "ADBE Effect Built In Params",
+                "enabled": true,
+                "properties": [
+                  {
+                    "name": "蒙版",
+                    "matchName": "ADBE Effect Mask Parade",
+                    "enabled": true,
+                    "properties": [
+                      
+                    ]
+                  },
+                  {
+                    "name": "效果不透明度",
+                    "matchName": "ADBE Effect Mask Opacity",
+                    "enabled": true,
+                    "value": {
+                      "static": 100
+                    }
+                  },
+                  {
+                    "name": "GPU 渲染",
+                    "matchName": "ADBE Force CPU GPU",
+                    "enabled": true,
+                    "value": {
+                      "static": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "name": "Hiro_CutIn_StainedGlass_003_kirakira2.png",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 1.73333333333333,
+        "outPoint": 2.1,
+        "startTime": -0.7,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "Hiro_CutIn_StainedGlass_003_kirakira2.png",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-hiro\\Hiro_CutIn_StainedGlass_003_kirakira2.png",
+          "hasAlpha": false,
+          "width": 2048,
+          "height": 883,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              441.5,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1071,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              124,
+              124,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          {
+            "name": "颜色键",
+            "matchName": "ADBE Color Key",
+            "enabled": true,
+            "properties": [
+              {
+                "name": "主色",
+                "matchName": "ADBE Color Key-0001",
+                "enabled": true,
+                "value": {
+                  "static": [
+                    0,
+                    0,
+                    0,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "颜色容差",
+                "matchName": "ADBE Color Key-0002",
+                "enabled": true,
+                "value": {
+                  "static": 222
+                }
+              },
+              {
+                "name": "薄化边缘",
+                "matchName": "ADBE Color Key-0003",
+                "enabled": true,
+                "value": {
+                  "static": 0
+                }
+              },
+              {
+                "name": "羽化边缘",
+                "matchName": "ADBE Color Key-0004",
+                "enabled": true,
+                "value": {
+                  "static": 0
+                }
+              },
+              {
+                "name": "合成选项",
+                "matchName": "ADBE Effect Built In Params",
+                "enabled": true,
+                "properties": [
+                  {
+                    "name": "蒙版",
+                    "matchName": "ADBE Effect Mask Parade",
+                    "enabled": true,
+                    "properties": [
+                      
+                    ]
+                  },
+                  {
+                    "name": "效果不透明度",
+                    "matchName": "ADBE Effect Mask Opacity",
+                    "enabled": true,
+                    "value": {
+                      "static": 100
+                    }
+                  },
+                  {
+                    "name": "GPU 渲染",
+                    "matchName": "ADBE Force CPU GPU",
+                    "enabled": true,
+                    "value": {
+                      "static": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "name": "破碎final反艾玛.mov",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 1.033,
+        "outPoint": -0.00033333333333,
+        "startTime": 1.03333333333333,
+        "stretch": -100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "破碎final反艾玛.mov",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-Ema\\破碎final反艾玛.mov",
+          "hasAlpha": true,
+          "width": 2048,
+          "height": 1152,
+          "duration": 1.03333333333333
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              100,
+              100,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          
+        ]
+      },
+      {
+        "index": 5,
+        "name": "破碎final",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 1,
+        "outPoint": 5.03333333333333,
+        "startTime": 0.33333333333333,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "破碎final",
+          "type": "Comp",
+          "width": 2048,
+          "height": 1152,
+          "duration": 5.03333333333333,
+          "frameRate": 30
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              100,
+              100,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": {
+          "keys": [
+            {
+              "time": 0,
+              "value": 1.73333333333333,
+              "inInterp": "BEZIER",
+              "outInterp": "BEZIER",
+              "inEase": [
+                {
+                  "speed": 0,
+                  "influence": 0.1
+                }
+              ],
+              "outEase": [
+                {
+                  "speed": 0,
+                  "influence": 90
+                }
+              ]
+            },
+            {
+              "time": 1,
+              "value": 0,
+              "inInterp": "BEZIER",
+              "outInterp": "BEZIER",
+              "inEase": [
+                {
+                  "speed": 0,
+                  "influence": 0.1
+                }
+              ],
+              "outEase": [
+                {
+                  "speed": 0,
+                  "influence": 90
+                }
+              ]
+            },
+            {
+              "time": 2,
+              "value": 0,
+              "inInterp": "LINEAR",
+              "outInterp": "LINEAR",
+              "inEase": [
+                {
+                  "speed": 0,
+                  "influence": 16.666666667
+                }
+              ],
+              "outEase": [
+                {
+                  "speed": 1.4950495049505,
+                  "influence": 16.666666667
+                }
+              ]
+            },
+            {
+              "time": 5.36666666666667,
+              "value": 5.03333333333333,
+              "inInterp": "LINEAR",
+              "outInterp": "LINEAR",
+              "inEase": [
+                {
+                  "speed": 1.4950495049505,
+                  "influence": 16.666666667
+                }
+              ],
+              "outEase": [
+                {
+                  "speed": 0,
+                  "influence": 16.666666667
+                }
+              ]
+            }
+          ]
+        },
+        "effects": [
+          
+        ]
+      },
+      {
+        "index": 6,
+        "name": "RefuteCutIn_StainedGlass_002.png",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 2,
+        "outPoint": 2.1,
+        "startTime": 2,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "RefuteCutIn_StainedGlass_002.png",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-Ema\\RefuteCutIn_StainedGlass_002.png",
+          "hasAlpha": true,
+          "width": 2048,
+          "height": 883,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              441.5,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1071,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              124,
+              124,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          
+        ]
+      },
+      {
+        "index": 7,
+        "name": "RefuteCutIn_StainedGlass_003.png",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 2,
+        "outPoint": 7.03333333333333,
+        "startTime": 2,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "RefuteCutIn_StainedGlass_003.png",
+          "type": "Footage",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\魔裁论破工程文件夹\\(素材)\\assets-Ema\\RefuteCutIn_StainedGlass_003.png",
+          "hasAlpha": true,
+          "width": 2048,
+          "height": 883,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              441.5,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1071,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              124,
+              124,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          
+        ]
+      },
+      {
+        "index": 8,
+        "name": "绿色 纯色 2",
+        "matchName": "ADBE AV Layer",
+        "enabled": true,
+        "shy": false,
+        "solo": false,
+        "inPoint": 0,
+        "outPoint": 5.03333333333333,
+        "startTime": 0,
+        "stretch": 100,
+        "blendMode": "NORMAL",
+        "trackMatteType": "NONE",
+        "trackMatteLayerIndex": null,
+        "threeD": false,
+        "parentIndex": null,
+        "source": {
+          "name": "绿色 纯色 2",
+          "type": "Footage",
+          "path": null,
+          "hasAlpha": false,
+          "width": 2048,
+          "height": 1152,
+          "duration": 0
+        },
+        "transform": {
+          "anchorPoint": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "position": {
+            "static": [
+              1024,
+              576,
+              0
+            ]
+          },
+          "scale": {
+            "static": [
+              100,
+              100,
+              100
+            ]
+          },
+          "opacity": {
+            "static": 100
+          },
+          "rotation": {
+            "static": 0
+          },
+          "xRotation": {
+            "static": 0
+          },
+          "yRotation": {
+            "static": 0
+          },
+          "orientation": {
+            "static": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "timeRemap": null,
+        "effects": [
+          
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,22 @@
 import { create } from 'zustand';
 
-export type LayoutType = 'text_box' | 'sketchbook';
+export type LayoutType = 'text_box' | 'sketchbook' | 'lunpo';
+
+export interface LunpoTransform {
+  offsetX: number;
+  offsetY: number;
+  scale: number;
+  rotation: number;
+  flipX: boolean;
+  flipY: boolean;
+}
+
+export interface LunpoColorAdjust {
+  hue: number;
+  saturation: number;
+  brightness: number;
+  contrast: number;
+}
 
 interface AppState {
   selectedCharId: string;
@@ -13,6 +29,9 @@ interface AppState {
   setTextAlign: (align: 'left' | 'center' | 'right') => void;
 
   layoutType: LayoutType;
+  lunpoCharacterUrl: string;
+  lunpoTransform: LunpoTransform;
+  lunpoColorAdjust: LunpoColorAdjust;
 
   // Actions
   setCharacter: (id: string) => void;
@@ -22,6 +41,9 @@ interface AppState {
   setFontLoaded: (loaded: boolean) => void;
 
   setLayoutType: (mode: LayoutType) => void;
+  setLunpoCharacterUrl: (url: string) => void;
+  setLunpoTransform: (patch: Partial<LunpoTransform>) => void;
+  setLunpoColorAdjust: (patch: Partial<LunpoColorAdjust>) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -33,6 +55,21 @@ export const useStore = create<AppState>((set) => ({
   textAlign: 'left',
 
   layoutType: 'text_box',
+  lunpoCharacterUrl: '/lunpo/assets-Ema/RefuteCutIn_Ema_001.png',
+  lunpoTransform: {
+    offsetX: 0,
+    offsetY: 0,
+    scale: 100,
+    rotation: 0,
+    flipX: false,
+    flipY: false,
+  },
+  lunpoColorAdjust: {
+    hue: 0,
+    saturation: 100,
+    brightness: 100,
+    contrast: 100,
+  },
 
   setCharacter: (id) => set({ selectedCharId: id, expressionIndex: 1 }), // 切换角色重置表情
   setExpression: (index) => set({ expressionIndex: index }),
@@ -42,4 +79,9 @@ export const useStore = create<AppState>((set) => ({
   setTextAlign: (align) => set({ textAlign: align }),
 
   setLayoutType: (type) => set({ layoutType: type, expressionIndex: 1 }),
+  setLunpoCharacterUrl: (url) => set({ lunpoCharacterUrl: url }),
+  setLunpoTransform: (patch) =>
+    set((state) => ({ lunpoTransform: { ...state.lunpoTransform, ...patch } })),
+  setLunpoColorAdjust: (patch) =>
+    set((state) => ({ lunpoColorAdjust: { ...state.lunpoColorAdjust, ...patch } })),
 }));
