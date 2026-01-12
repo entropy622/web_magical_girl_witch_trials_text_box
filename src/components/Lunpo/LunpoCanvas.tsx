@@ -269,6 +269,18 @@ const applyColorKey = (image: HTMLImageElement, settings: ColorKeySettings) => {
   return canvas;
 };
 
+const getLoopedFrameTime = (time: number, frameRate: number, duration: number) => {
+  const totalFrames = Math.max(1, Math.round(duration * frameRate));
+  const frame = Math.floor(time * frameRate) % totalFrames;
+  return frame / frameRate;
+};
+
+const getClampedFrameTime = (time: number, frameRate: number, duration: number) => {
+  const totalFrames = Math.max(1, Math.round(duration * frameRate));
+  const frame = Math.min(Math.floor(time * frameRate), totalFrames - 1);
+  return frame / frameRate;
+};
+
 export const LunpoCanvas = forwardRef<
   LunpoCanvasHandle,
   { width: number; height: number; scale: number }
@@ -279,6 +291,9 @@ export const LunpoCanvas = forwardRef<
   const [assetsReady, setAssetsReady] = useState(false);
   const assetsRef = useRef<
     Map<string, HTMLImageElement | HTMLVideoElement | HTMLCanvasElement>
+  >(new Map());
+  const videoFrameCacheRef = useRef<
+    Map<string, { canvas: HTMLCanvasElement; time: number }>
   >(new Map());
   const exportLockRef = useRef(false);
   const isExportingRef = useRef(false);
@@ -442,13 +457,35 @@ export const LunpoCanvas = forwardRef<
               const duration = Number.isFinite(video.duration) ? video.duration : 0;
               const localTime = (time - layer.startTime) * (layer.stretch / 100);
               const remapped = layer.timeRemap ? getPropValue(layer.timeRemap, time) : localTime;
-              const adjustedTime =
-                layer.timeRemap || layer.stretch >= 0 ? remapped ?? 0 : localTime + duration;
-              const targetTime = clamp(adjustedTime ?? 0, 0, duration || 0);
-              if (Math.abs(video.currentTime - targetTime) > 0.05) {
+              const targetTime = clamp(remapped ?? 0, 0, duration || 0);
+              const cacheKey = item.assetKey ?? item.url ?? '';
+              const cached = cacheKey ? videoFrameCacheRef.current.get(cacheKey) : undefined;
+              const frameStep = 1 / (config.comp.frameRate || 30);
+              if (!video.seeking && Math.abs(video.currentTime - targetTime) > frameStep / 2) {
                 video.currentTime = targetTime;
               }
-              drawImageWithTransform(ctx, video, transform);
+
+              if (video.readyState >= 2 && !video.seeking) {
+                drawImageWithTransform(ctx, video, transform);
+                if (cacheKey) {
+                  let cache = cached;
+                  if (!cache) {
+                    const cacheCanvas = document.createElement('canvas');
+                    cacheCanvas.width = width;
+                    cacheCanvas.height = height;
+                    cache = { canvas: cacheCanvas, time: targetTime };
+                    videoFrameCacheRef.current.set(cacheKey, cache);
+                  }
+                  const cacheCtx = cache.canvas.getContext('2d');
+                  if (cacheCtx) {
+                    cacheCtx.clearRect(0, 0, width, height);
+                    drawImageWithTransform(cacheCtx, video, transform);
+                    cache.time = targetTime;
+                  }
+                }
+              } else if (cached) {
+                ctx.drawImage(cached.canvas, 0, 0);
+              }
             }
           } else {
             drawImageWithTransform(ctx, asset as CanvasImageSource, transform);
@@ -463,10 +500,11 @@ export const LunpoCanvas = forwardRef<
     if (!config || !assetsReady) return;
     let rafId = 0;
     const duration = config.comp.duration;
+    const frameRate = config.comp.frameRate || 30;
     const start = performance.now();
     const tick = (now: number) => {
       const elapsed = (now - start) / 1000;
-      const t = elapsed % duration;
+      const t = getLoopedFrameTime(elapsed, frameRate, duration);
       if (!isExportingRef.current) {
         renderFrame(t);
       }
@@ -508,11 +546,13 @@ export const LunpoCanvas = forwardRef<
       };
 
       const durationMs = config.comp.duration * 1000;
+      const frameRate = config.comp.frameRate || 30;
+      const durationSec = config.comp.duration;
       const start = performance.now();
       let rafId = 0;
       const tick = (now: number) => {
         const elapsed = now - start;
-        renderFrame(elapsed / 1000);
+        renderFrame(getClampedFrameTime(elapsed / 1000, frameRate, durationSec));
         if (elapsed < durationMs) {
           rafId = requestAnimationFrame(tick);
         } else {
