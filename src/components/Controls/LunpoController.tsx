@@ -324,38 +324,6 @@ export default function LunpoController() {
             重置
           </button>
         </div>
-        <RangeField
-          label="色相 (deg)"
-          value={lunpoColorAdjust.hue}
-          min={-180}
-          max={180}
-          onChange={(value) => setLunpoColorAdjust({ hue: value })}
-          onReset={() => setLunpoColorAdjust({ hue: DEFAULT_COLOR.hue })}
-        />
-        <RangeField
-          label="饱和度 (%)"
-          value={lunpoColorAdjust.saturation}
-          min={0}
-          max={200}
-          onChange={(value) => setLunpoColorAdjust({ saturation: value })}
-          onReset={() => setLunpoColorAdjust({ saturation: DEFAULT_COLOR.saturation })}
-        />
-        <RangeField
-          label="亮度 (%)"
-          value={lunpoColorAdjust.brightness}
-          min={50}
-          max={150}
-          onChange={(value) => setLunpoColorAdjust({ brightness: value })}
-          onReset={() => setLunpoColorAdjust({ brightness: DEFAULT_COLOR.brightness })}
-        />
-        <RangeField
-          label="对比度 (%)"
-          value={lunpoColorAdjust.contrast}
-          min={50}
-          max={150}
-          onChange={(value) => setLunpoColorAdjust({ contrast: value })}
-          onReset={() => setLunpoColorAdjust({ contrast: DEFAULT_COLOR.contrast })}
-        />
       </section>
     </>
   );
