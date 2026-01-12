@@ -11,6 +11,9 @@ https://github.com/MarkCup-Official/Anan-s-Sketchbook-Chat-Box
 
 ## 项目简介
 利用简洁清晰的界面来生成你的魔审表情包
+
+![lunpo-1768231189355 (2)](https://github.com/user-attachments/assets/111ce66e-50a7-4df7-ac56-4c9938ca7a4f)
+<img width="2163" height="1349" alt="image" src="https://github.com/user-attachments/assets/7ed0718a-5252-4dd0-a52c-267e2b419d72" />
 ![img.png](img/img.png)
 ![img_1.png](img/img_1.png)
 ![img.png](img/img_2.png)
