@@ -39,6 +39,15 @@ interface AeTransform {
 
 interface AeEffect {
   matchName: string;
+  properties?: AeEffectProperty[];
+}
+
+interface AeEffectProperty {
+  matchName: string;
+  value?: {
+    static?: number | number[];
+  };
+  properties?: AeEffectProperty[];
 }
 
 interface AeSource {
@@ -82,20 +91,28 @@ interface PreparedLayer {
   layer: AeLayer;
   type: AssetType | 'skip';
   url: string | null;
+  assetKey: string | null;
   isCharacter: boolean;
-  isMask: boolean;
-  hasColorKey: boolean;
+  colorKey: ColorKeySettings | null;
+}
+
+interface ColorKeySettings {
+  color: [number, number, number];
+  tolerance: number;
 }
 
 export interface LunpoCanvasHandle {
   exportWebm: () => Promise<void>;
 }
 
-const MASK_LAYER_NAME = 'Hiro_CutIn_StainedGlass_luminescence001.png';
 const CHARACTER_KEYWORD = 'RefuteCutIn';
+const FINAL_KEYWORD = '\u7834\u788efinal';
+const FINAL_REVERSE_KEYWORD = '\u53cd';
 
-const getBlendMode = (blendMode: string, hasColorKey: boolean) => {
-  if (hasColorKey) return 'screen';
+const isCharacterLayer = (name: string) =>
+  name.includes(CHARACTER_KEYWORD) && !name.includes('StainedGlass');
+
+const getBlendMode = (blendMode: string) => {
   switch (blendMode) {
     case 'ADD':
       return 'lighter';
@@ -156,8 +173,8 @@ const getDimPropValue = (prop: AeDimProp<number[]> | undefined, time: number) =>
 const resolveAssetUrl = (layer: AeLayer) => {
   const name = layer.source?.name ?? layer.name;
   if (!name) return null;
-  if (name.endsWith('.mov') || name.includes('破碎final')) {
-    const isReverse = name.includes('反') || layer.stretch < 0;
+  if (name.endsWith('.mov') || name.includes(FINAL_KEYWORD)) {
+    const isReverse = name.includes(FINAL_REVERSE_KEYWORD) || layer.stretch < 0;
     return isReverse ? '/lunpo/reverse.webm' : '/lunpo/forward.webm';
   }
   if (layer.source?.path) {
@@ -198,17 +215,71 @@ const createVideo = (url: string) =>
     video.onerror = () => reject(new Error(`Failed to load video: ${url}`));
   });
 
+const findEffectValue = (
+  properties: AeEffectProperty[] | undefined,
+  matchName: string
+): number | number[] | undefined => {
+  if (!properties) return undefined;
+  for (const prop of properties) {
+    if (prop.matchName === matchName && prop.value?.static !== undefined) {
+      return prop.value.static;
+    }
+    const nested = findEffectValue(prop.properties, matchName);
+    if (nested !== undefined) return nested;
+  }
+  return undefined;
+};
+
+const getColorKeySettings = (layer: AeLayer): ColorKeySettings | null => {
+  const effect = layer.effects?.find((item) => item.matchName === 'ADBE Color Key');
+  if (!effect) return null;
+  const colorValue = findEffectValue(effect.properties, 'ADBE Color Key-0001');
+  const toleranceValue = findEffectValue(effect.properties, 'ADBE Color Key-0002');
+  if (!Array.isArray(colorValue)) return null;
+  const rgb = colorValue.slice(0, 3).map((value) => Math.round(value * 255)) as [
+    number,
+    number,
+    number
+  ];
+  const tolerance = typeof toleranceValue === 'number' ? toleranceValue : 0;
+  return { color: rgb, tolerance };
+};
+
+const applyColorKey = (image: HTMLImageElement, settings: ColorKeySettings) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return canvas;
+  ctx.drawImage(image, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  const [r, g, b] = settings.color;
+  const tolerance = settings.tolerance;
+  const toleranceSq = tolerance * tolerance;
+  for (let i = 0; i < data.length; i += 4) {
+    const dr = data[i] - r;
+    const dg = data[i + 1] - g;
+    const db = data[i + 2] - b;
+    if (dr * dr + dg * dg + db * db <= toleranceSq) {
+      data[i + 3] = 0;
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+};
+
 export const LunpoCanvas = forwardRef<
   LunpoCanvasHandle,
   { width: number; height: number; scale: number }
 >(({ width, height, scale }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const offscreenRef = useRef<HTMLCanvasElement | null>(null);
   const [config, setConfig] = useState<AeConfig | null>(null);
   const [layers, setLayers] = useState<PreparedLayer[]>([]);
   const [assetsReady, setAssetsReady] = useState(false);
-  const assetsRef = useRef<Map<string, HTMLImageElement | HTMLVideoElement>>(new Map());
-  const maskLayerRef = useRef<PreparedLayer | null>(null);
+  const assetsRef = useRef<
+    Map<string, HTMLImageElement | HTMLVideoElement | HTMLCanvasElement>
+  >(new Map());
   const exportLockRef = useRef(false);
   const isExportingRef = useRef(false);
 
@@ -229,24 +300,29 @@ export const LunpoCanvas = forwardRef<
 
   useEffect(() => {
     if (!config) return;
-      const prepared = config.comp.layers.map((layer) => {
-        const isSolid = isSolidLayer(layer);
-        const isMask = layer.name === MASK_LAYER_NAME;
-        const isCharacter = isCharacterLayer(layer.name);
-        const url = isCharacter ? lunpoCharacterUrl : resolveAssetUrl(layer);
-        const type = url?.endsWith('.webm') ? 'video' : 'image';
-        const shouldSkip = !url || layer.source?.type === 'Comp' || isSolid;
-        return {
-          layer,
-          type: shouldSkip ? 'skip' : type,
-          url,
-          isCharacter,
-          isMask,
-          hasColorKey: isColorKeyLayer(layer),
-        } as PreparedLayer;
-      });
+    const prepared = config.comp.layers.map((layer) => {
+      const isSolid = isSolidLayer(layer);
+      const isCharacter = isCharacterLayer(layer.name);
+      const colorKey = isColorKeyLayer(layer) ? getColorKeySettings(layer) : null;
+      const url = isCharacter ? lunpoCharacterUrl : resolveAssetUrl(layer);
+      const type = url?.endsWith('.webm') ? 'video' : 'image';
+      const isPrecomp = layer.source?.type === 'Comp';
+      const shouldSkip = !url || isSolid || (isPrecomp && !layer.name.includes(FINAL_KEYWORD));
+      const assetKey = url
+        ? colorKey && type === 'image'
+          ? `${url}|colorkey|${colorKey.color.join(',')}|${colorKey.tolerance}`
+          : url
+        : null;
+      return {
+        layer,
+        type: shouldSkip ? 'skip' : type,
+        url,
+        assetKey,
+        isCharacter,
+        colorKey,
+      } as PreparedLayer;
+    });
     setLayers(prepared);
-    maskLayerRef.current = prepared.find((item) => item.isMask) ?? null;
   }, [config, lunpoCharacterUrl]);
 
   useEffect(() => {
@@ -254,37 +330,33 @@ export const LunpoCanvas = forwardRef<
     const loadAssets = async () => {
       const loadPromises: Promise<void>[] = [];
       layers.forEach((item) => {
-        if (!item.url || item.type === 'skip' || item.isMask) return;
-        if (assetsRef.current.has(item.url)) return;
+        if (!item.url || item.type === 'skip' || !item.assetKey) return;
+        if (assetsRef.current.has(item.assetKey)) return;
         if (item.type === 'image') {
           const promise = createImage(item.url).then((img) => {
-            assetsRef.current.set(item.url!, img);
+            const asset = item.colorKey ? applyColorKey(img, item.colorKey) : img;
+            assetsRef.current.set(item.assetKey!, asset);
           });
           loadPromises.push(promise);
         } else {
           const promise = createVideo(item.url).then((video) => {
-            assetsRef.current.set(item.url!, video);
+            assetsRef.current.set(item.assetKey!, video);
           });
           loadPromises.push(promise);
         }
       });
-      if (maskLayerRef.current?.url && !assetsRef.current.has(maskLayerRef.current.url)) {
-        loadPromises.push(
-          createImage(maskLayerRef.current.url).then((img) => {
-            assetsRef.current.set(maskLayerRef.current!.url!, img);
-          })
-        );
-      }
-        const results = await Promise.allSettled(loadPromises);
-        results.forEach((result) => {
-          if (result.status === 'rejected') {
-            console.error('Lunpo asset failed', result.reason);
-          }
-        });
-        if (isMounted) {
-          setAssetsReady(true);
+      const results = await Promise.allSettled(loadPromises);
+      results.forEach((result) => {
+        if (result.status === 'rejected') {
+          console.error('Lunpo asset failed', result.reason);
         }
-      };
+      });
+
+      if (isMounted) {
+        setAssetsReady(true);
+      }
+    };
+
     if (layers.length) {
       setAssetsReady(false);
       loadAssets().catch((err) => console.error('Failed to load lunpo assets', err));
@@ -336,89 +408,55 @@ export const LunpoCanvas = forwardRef<
     ctx.drawImage(asset, 0, 0);
   };
 
-  const drawMask = useCallback(
-    (ctx: CanvasRenderingContext2D, time: number) => {
-      const maskLayer = maskLayerRef.current;
-      if (!maskLayer?.url) return;
-      const maskAsset = assetsRef.current.get(maskLayer.url) as HTMLImageElement | undefined;
-      if (!maskAsset) return;
-      const transform = getLayerTransform(maskLayer.layer, time, false);
-      ctx.save();
-      drawImageWithTransform(ctx, maskAsset, transform);
-      ctx.restore();
-    },
-    [getLayerTransform]
-  );
-
   const renderFrame = useCallback(
     (time: number) => {
       const canvas = canvasRef.current;
       if (!canvas || !config) return;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      if (!offscreenRef.current) {
-        offscreenRef.current = document.createElement('canvas');
-      }
-      const offscreen = offscreenRef.current;
-      offscreen.width = width;
-      offscreen.height = height;
-      const offCtx = offscreen.getContext('2d');
-      if (!offCtx) return;
-
       ctx.clearRect(0, 0, width, height);
 
       layers
-        .filter((item) => item.type !== 'skip' && !item.isMask && !isSolidLayer(item.layer))
-        .sort((a, b) => a.layer.index - b.layer.index)
+        .filter((item) => item.type !== 'skip' && !isSolidLayer(item.layer))
+        .sort((a, b) => b.layer.index - a.layer.index)
         .forEach((item) => {
           const layer = item.layer;
           const visibleStart = Math.min(layer.inPoint, layer.outPoint);
           const visibleEnd = Math.max(layer.inPoint, layer.outPoint);
           if (time < visibleStart || time > visibleEnd) return;
-          const asset = item.url ? assetsRef.current.get(item.url) : undefined;
+          const asset = item.assetKey ? assetsRef.current.get(item.assetKey) : undefined;
           if (!asset) return;
 
           const opacity = getPropValue(layer.transform?.opacity, time) ?? 100;
           const isBackground = !item.isCharacter;
-          const composite = getBlendMode(layer.blendMode, item.hasColorKey);
+          const composite = getBlendMode(layer.blendMode);
           const transform = getLayerTransform(layer, time, item.isCharacter);
 
-          const drawTarget = (targetCtx: CanvasRenderingContext2D) => {
-            targetCtx.save();
-            targetCtx.globalAlpha = opacity / 100;
-            targetCtx.globalCompositeOperation = composite as GlobalCompositeOperation;
-            targetCtx.filter = isBackground ? backgroundFilter : 'none';
-            if (item.type === 'video') {
-              const video = asset as HTMLVideoElement;
-              if (video.readyState >= 2) {
-                const localTime = (time - layer.startTime) * Math.abs(layer.stretch / 100);
-                const remapped = layer.timeRemap ? getPropValue(layer.timeRemap, time) : localTime;
-                const duration = Number.isFinite(video.duration) ? video.duration : 0;
-                const targetTime = clamp(remapped ?? localTime, 0, duration || 0);
-                if (Math.abs(video.currentTime - targetTime) > 0.05) {
-                  video.currentTime = targetTime;
-                }
-                drawImageWithTransform(targetCtx, video, transform);
+          ctx.save();
+          ctx.globalAlpha = opacity / 100;
+          ctx.globalCompositeOperation = composite as GlobalCompositeOperation;
+          ctx.filter = isBackground ? backgroundFilter : 'none';
+          if (item.type === 'video') {
+            const video = asset as HTMLVideoElement;
+            if (video.readyState >= 2) {
+              const duration = Number.isFinite(video.duration) ? video.duration : 0;
+              const localTime = (time - layer.startTime) * (layer.stretch / 100);
+              const remapped = layer.timeRemap ? getPropValue(layer.timeRemap, time) : localTime;
+              const adjustedTime =
+                layer.timeRemap || layer.stretch >= 0 ? remapped ?? 0 : localTime + duration;
+              const targetTime = clamp(adjustedTime ?? 0, 0, duration || 0);
+              if (Math.abs(video.currentTime - targetTime) > 0.05) {
+                video.currentTime = targetTime;
               }
-            } else {
-              drawImageWithTransform(targetCtx, asset as HTMLImageElement, transform);
+              drawImageWithTransform(ctx, video, transform);
             }
-            targetCtx.restore();
-          };
-
-          const shouldMask = item.layer.name.includes('StainedGlass');
-          if (shouldMask && maskLayerRef.current) {
-            offCtx.clearRect(0, 0, width, height);
-            drawTarget(offCtx);
-            offCtx.globalCompositeOperation = 'destination-in';
-            drawMask(offCtx, time);
-            ctx.drawImage(offscreen, 0, 0);
           } else {
-            drawTarget(ctx);
+            drawImageWithTransform(ctx, asset as CanvasImageSource, transform);
           }
+          ctx.restore();
         });
     },
-    [backgroundFilter, config, drawMask, getLayerTransform, height, layers, width]
+    [backgroundFilter, config, getLayerTransform, height, layers, width]
   );
 
   useEffect(() => {
@@ -514,5 +552,3 @@ export const LunpoCanvas = forwardRef<
 });
 
 LunpoCanvas.displayName = 'LunpoCanvas';
-const isCharacterLayer = (name: string) =>
-  name.includes(CHARACTER_KEYWORD) && !name.includes('StainedGlass');
