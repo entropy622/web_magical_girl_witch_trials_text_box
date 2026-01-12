@@ -38,7 +38,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
       console.error('Copy failed', error);
-      alert('复制失败，请重试 (部分浏览器不支持此功能)');
       alert('复制失败，请重试（部分浏览器不支持此功能）');
     } finally {
       setIsCopying(false);
@@ -78,7 +77,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-4 md:p-6 space-y-6 md:space-y-8 flex-1">
         <section>
           <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">选择画布</label>
-          <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
           <div className="grid grid-cols-3 md:grid-cols-3 gap-2">
             <ControllerButton
               text={'文本框'}
@@ -122,7 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600'
             )}
           >
-            {isExporting ? 'Exporting...' : 'Export WebM'}
+            {isExporting ? '导出中...' : '导出 WebM'}
           </button>
         ) : (
           <>

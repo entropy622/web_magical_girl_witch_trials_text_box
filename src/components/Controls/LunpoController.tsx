@@ -64,11 +64,11 @@ export default function LunpoController() {
   return (
     <>
       <section>
-        <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">Character</label>
+        <label className="block text-sm font-bold text-gray-700 mb-2 md:mb-3">角色立绘</label>
         <div className="flex items-center gap-3">
           <img
             src={lunpoCharacterUrl}
-            alt="Character preview"
+            alt="角色预览"
             className="w-20 h-20 rounded-lg border border-gray-200 object-cover bg-gray-50"
           />
           <div className="flex flex-col gap-2">
@@ -78,17 +78,17 @@ export default function LunpoController() {
               onClick={() => setLunpoCharacterUrl('/lunpo/assets-Ema/RefuteCutIn_Ema_001.png')}
               className="text-xs text-pink-500 hover:text-pink-700 text-left"
             >
-              Reset to default
+              重置为默认
             </button>
           </div>
         </div>
       </section>
 
       <section className="space-y-3">
-        <label className="block text-sm font-bold text-gray-700">Transform</label>
+        <label className="block text-sm font-bold text-gray-700">角色变换</label>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Offset X</label>
+            <label className="block text-xs text-gray-600 mb-1">位移 X</label>
             <input
               type="number"
               value={lunpoTransform.offsetX}
@@ -97,7 +97,7 @@ export default function LunpoController() {
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Offset Y</label>
+            <label className="block text-xs text-gray-600 mb-1">位移 Y</label>
             <input
               type="number"
               value={lunpoTransform.offsetY}
@@ -107,14 +107,14 @@ export default function LunpoController() {
           </div>
         </div>
         <RangeField
-          label="Scale (%)"
+          label="缩放 (%)"
           value={lunpoTransform.scale}
           min={20}
           max={200}
           onChange={(value) => setLunpoTransform({ scale: value })}
         />
         <RangeField
-          label="Rotation (deg)"
+          label="旋转 (deg)"
           value={lunpoTransform.rotation}
           min={-180}
           max={180}
@@ -127,7 +127,7 @@ export default function LunpoController() {
               checked={lunpoTransform.flipX}
               onChange={(e) => setLunpoTransform({ flipX: e.target.checked })}
             />
-            Flip X
+            水平翻转
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -135,14 +135,14 @@ export default function LunpoController() {
               checked={lunpoTransform.flipY}
               onChange={(e) => setLunpoTransform({ flipY: e.target.checked })}
             />
-            Flip Y
+            垂直翻转
           </label>
         </div>
       </section>
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="block text-sm font-bold text-gray-700">Background Color</label>
+          <label className="block text-sm font-bold text-gray-700">背景调色</label>
           <button
             type="button"
             onClick={() =>
@@ -150,32 +150,32 @@ export default function LunpoController() {
             }
             className="text-xs text-pink-500 hover:text-pink-700"
           >
-            Reset
+            重置
           </button>
         </div>
         <RangeField
-          label="Hue (deg)"
+          label="色相 (deg)"
           value={lunpoColorAdjust.hue}
           min={-180}
           max={180}
           onChange={(value) => setLunpoColorAdjust({ hue: value })}
         />
         <RangeField
-          label="Saturation (%)"
+          label="饱和度 (%)"
           value={lunpoColorAdjust.saturation}
           min={0}
           max={200}
           onChange={(value) => setLunpoColorAdjust({ saturation: value })}
         />
         <RangeField
-          label="Brightness (%)"
+          label="亮度 (%)"
           value={lunpoColorAdjust.brightness}
           min={50}
           max={150}
           onChange={(value) => setLunpoColorAdjust({ brightness: value })}
         />
         <RangeField
-          label="Contrast (%)"
+          label="对比度 (%)"
           value={lunpoColorAdjust.contrast}
           min={50}
           max={150}

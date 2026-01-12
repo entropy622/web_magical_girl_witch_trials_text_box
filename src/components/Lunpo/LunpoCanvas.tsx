@@ -182,7 +182,7 @@ const createImage = (url: string) =>
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
-    img.onerror = reject;
+    img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
     img.src = url;
   });
 
@@ -229,20 +229,22 @@ export const LunpoCanvas = forwardRef<
 
   useEffect(() => {
     if (!config) return;
-    const prepared = config.comp.layers.map((layer) => {
-      const isMask = layer.name === MASK_LAYER_NAME;
-      const isCharacter = isCharacterLayer(layer.name);
-      const url = isCharacter ? lunpoCharacterUrl : resolveAssetUrl(layer);
-      const type = url?.endsWith('.webm') ? 'video' : 'image';
-      return {
-        layer,
-        type: url ? type : 'skip',
-        url,
-        isCharacter,
-        isMask,
-        hasColorKey: isColorKeyLayer(layer),
-      } as PreparedLayer;
-    });
+      const prepared = config.comp.layers.map((layer) => {
+        const isSolid = isSolidLayer(layer);
+        const isMask = layer.name === MASK_LAYER_NAME;
+        const isCharacter = isCharacterLayer(layer.name);
+        const url = isCharacter ? lunpoCharacterUrl : resolveAssetUrl(layer);
+        const type = url?.endsWith('.webm') ? 'video' : 'image';
+        const shouldSkip = !url || layer.source?.type === 'Comp' || isSolid;
+        return {
+          layer,
+          type: shouldSkip ? 'skip' : type,
+          url,
+          isCharacter,
+          isMask,
+          hasColorKey: isColorKeyLayer(layer),
+        } as PreparedLayer;
+      });
     setLayers(prepared);
     maskLayerRef.current = prepared.find((item) => item.isMask) ?? null;
   }, [config, lunpoCharacterUrl]);
@@ -273,11 +275,16 @@ export const LunpoCanvas = forwardRef<
           })
         );
       }
-      await Promise.all(loadPromises);
-      if (isMounted) {
-        setAssetsReady(true);
-      }
-    };
+        const results = await Promise.allSettled(loadPromises);
+        results.forEach((result) => {
+          if (result.status === 'rejected') {
+            console.error('Lunpo asset failed', result.reason);
+          }
+        });
+        if (isMounted) {
+          setAssetsReady(true);
+        }
+      };
     if (layers.length) {
       setAssetsReady(false);
       loadAssets().catch((err) => console.error('Failed to load lunpo assets', err));

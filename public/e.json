@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "app": "After Effects",
   "comp": {
-    "name": "×Ü-°¬Âê1",
+    "name": "æ€»-è‰¾ç›1",
     "width": 2048,
     "height": 1152,
     "duration": 5.03333333333333,
@@ -32,7 +32,7 @@
         "source": {
           "name": "RefuteCutIn_Ema_001.png",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-Ema\\RefuteCutIn_Ema_001.png",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-Ema\\RefuteCutIn_Ema_001.png",
           "hasAlpha": true,
           "width": 1472,
           "height": 2048,
@@ -145,7 +145,7 @@
         "source": {
           "name": "Hiro_CutIn_StainedGlass_luminescence001.png",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-hiro\\Hiro_CutIn_StainedGlass_luminescence001.png",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-hiro\\Hiro_CutIn_StainedGlass_luminescence001.png",
           "hasAlpha": false,
           "width": 2048,
           "height": 883,
@@ -196,12 +196,12 @@
         "timeRemap": null,
         "effects": [
           {
-            "name": "ÑÕÉ«¼ü",
+            "name": "é¢œè‰²é”®",
             "matchName": "ADBE Color Key",
             "enabled": true,
             "properties": [
               {
-                "name": "Ö÷É«",
+                "name": "ä¸»è‰²",
                 "matchName": "ADBE Color Key-0001",
                 "enabled": true,
                 "value": {
@@ -214,7 +214,7 @@
                 }
               },
               {
-                "name": "ÑÕÉ«Èİ²î",
+                "name": "é¢œè‰²å®¹å·®",
                 "matchName": "ADBE Color Key-0002",
                 "enabled": true,
                 "value": {
@@ -222,7 +222,7 @@
                 }
               },
               {
-                "name": "±¡»¯±ßÔµ",
+                "name": "è–„åŒ–è¾¹ç¼˜",
                 "matchName": "ADBE Color Key-0003",
                 "enabled": true,
                 "value": {
@@ -230,7 +230,7 @@
                 }
               },
               {
-                "name": "Óğ»¯±ßÔµ",
+                "name": "ç¾½åŒ–è¾¹ç¼˜",
                 "matchName": "ADBE Color Key-0004",
                 "enabled": true,
                 "value": {
@@ -238,12 +238,12 @@
                 }
               },
               {
-                "name": "ºÏ³ÉÑ¡Ïî",
+                "name": "åˆæˆé€‰é¡¹",
                 "matchName": "ADBE Effect Built In Params",
                 "enabled": true,
                 "properties": [
                   {
-                    "name": "ÃÉ°æ",
+                    "name": "è’™ç‰ˆ",
                     "matchName": "ADBE Effect Mask Parade",
                     "enabled": true,
                     "properties": [
@@ -251,7 +251,7 @@
                     ]
                   },
                   {
-                    "name": "Ğ§¹û²»Í¸Ã÷¶È",
+                    "name": "æ•ˆæœä¸é€æ˜åº¦",
                     "matchName": "ADBE Effect Mask Opacity",
                     "enabled": true,
                     "value": {
@@ -259,7 +259,7 @@
                     }
                   },
                   {
-                    "name": "GPU äÖÈ¾",
+                    "name": "GPU æ¸²æŸ“",
                     "matchName": "ADBE Force CPU GPU",
                     "enabled": true,
                     "value": {
@@ -291,7 +291,7 @@
         "source": {
           "name": "Hiro_CutIn_StainedGlass_003_kirakira2.png",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-hiro\\Hiro_CutIn_StainedGlass_003_kirakira2.png",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-hiro\\Hiro_CutIn_StainedGlass_003_kirakira2.png",
           "hasAlpha": false,
           "width": 2048,
           "height": 883,
@@ -342,12 +342,12 @@
         "timeRemap": null,
         "effects": [
           {
-            "name": "ÑÕÉ«¼ü",
+            "name": "é¢œè‰²é”®",
             "matchName": "ADBE Color Key",
             "enabled": true,
             "properties": [
               {
-                "name": "Ö÷É«",
+                "name": "ä¸»è‰²",
                 "matchName": "ADBE Color Key-0001",
                 "enabled": true,
                 "value": {
@@ -360,7 +360,7 @@
                 }
               },
               {
-                "name": "ÑÕÉ«Èİ²î",
+                "name": "é¢œè‰²å®¹å·®",
                 "matchName": "ADBE Color Key-0002",
                 "enabled": true,
                 "value": {
@@ -368,7 +368,7 @@
                 }
               },
               {
-                "name": "±¡»¯±ßÔµ",
+                "name": "è–„åŒ–è¾¹ç¼˜",
                 "matchName": "ADBE Color Key-0003",
                 "enabled": true,
                 "value": {
@@ -376,7 +376,7 @@
                 }
               },
               {
-                "name": "Óğ»¯±ßÔµ",
+                "name": "ç¾½åŒ–è¾¹ç¼˜",
                 "matchName": "ADBE Color Key-0004",
                 "enabled": true,
                 "value": {
@@ -384,12 +384,12 @@
                 }
               },
               {
-                "name": "ºÏ³ÉÑ¡Ïî",
+                "name": "åˆæˆé€‰é¡¹",
                 "matchName": "ADBE Effect Built In Params",
                 "enabled": true,
                 "properties": [
                   {
-                    "name": "ÃÉ°æ",
+                    "name": "è’™ç‰ˆ",
                     "matchName": "ADBE Effect Mask Parade",
                     "enabled": true,
                     "properties": [
@@ -397,7 +397,7 @@
                     ]
                   },
                   {
-                    "name": "Ğ§¹û²»Í¸Ã÷¶È",
+                    "name": "æ•ˆæœä¸é€æ˜åº¦",
                     "matchName": "ADBE Effect Mask Opacity",
                     "enabled": true,
                     "value": {
@@ -405,7 +405,7 @@
                     }
                   },
                   {
-                    "name": "GPU äÖÈ¾",
+                    "name": "GPU æ¸²æŸ“",
                     "matchName": "ADBE Force CPU GPU",
                     "enabled": true,
                     "value": {
@@ -420,7 +420,7 @@
       },
       {
         "index": 4,
-        "name": "ÆÆËéfinal·´°¬Âê.mov",
+        "name": "ç ´ç¢finalåè‰¾ç›.mov",
         "matchName": "ADBE AV Layer",
         "enabled": true,
         "shy": false,
@@ -435,9 +435,9 @@
         "threeD": false,
         "parentIndex": null,
         "source": {
-          "name": "ÆÆËéfinal·´°¬Âê.mov",
+          "name": "ç ´ç¢finalåè‰¾ç›.mov",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-Ema\\ÆÆËéfinal·´°¬Âê.mov",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-Ema\\ç ´ç¢finalåè‰¾ç›.mov",
           "hasAlpha": true,
           "width": 2048,
           "height": 1152,
@@ -492,7 +492,7 @@
       },
       {
         "index": 5,
-        "name": "ÆÆËéfinal",
+        "name": "ç ´ç¢final",
         "matchName": "ADBE AV Layer",
         "enabled": true,
         "shy": false,
@@ -507,7 +507,7 @@
         "threeD": false,
         "parentIndex": null,
         "source": {
-          "name": "ÆÆËéfinal",
+          "name": "ç ´ç¢final",
           "type": "Comp",
           "width": 2048,
           "height": 1152,
@@ -655,7 +655,7 @@
         "source": {
           "name": "RefuteCutIn_StainedGlass_002.png",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-Ema\\RefuteCutIn_StainedGlass_002.png",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-Ema\\RefuteCutIn_StainedGlass_002.png",
           "hasAlpha": true,
           "width": 2048,
           "height": 883,
@@ -727,7 +727,7 @@
         "source": {
           "name": "RefuteCutIn_StainedGlass_003.png",
           "type": "Footage",
-          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\Ä§²ÃÂÛÆÆ¹¤³ÌÎÄ¼ş¼Ğ\\(ËØ²Ä)\\assets-Ema\\RefuteCutIn_StainedGlass_003.png",
+          "path": "C:\\Users\\Aentro\\Desktop\\Projects\\ae\\é­”è£è®ºç ´å·¥ç¨‹æ–‡ä»¶å¤¹\\(ç´ æ)\\assets-Ema\\RefuteCutIn_StainedGlass_003.png",
           "hasAlpha": true,
           "width": 2048,
           "height": 883,
@@ -782,7 +782,7 @@
       },
       {
         "index": 8,
-        "name": "ÂÌÉ« ´¿É« 2",
+        "name": "ç»¿è‰² çº¯è‰² 2",
         "matchName": "ADBE AV Layer",
         "enabled": true,
         "shy": false,
@@ -797,7 +797,7 @@
         "threeD": false,
         "parentIndex": null,
         "source": {
-          "name": "ÂÌÉ« ´¿É« 2",
+          "name": "ç»¿è‰² çº¯è‰² 2",
           "type": "Footage",
           "path": null,
           "hasAlpha": false,
