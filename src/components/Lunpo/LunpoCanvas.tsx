@@ -1,4 +1,4 @@
-import React, {
+import {
   forwardRef,
   useCallback,
   useEffect,
@@ -136,8 +136,6 @@ const getBlendMode = (blendMode: string) => {
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-const smoothstep = (t: number) => t * t * (3 - 2 * t);
-
 const cubicBezier = (t: number, p0: number, p1: number, p2: number, p3: number) => {
   const u = 1 - t;
   return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
@@ -221,7 +219,8 @@ const getPropValue = <T,>(prop: AeProp<T> | undefined, time: number): T | undefi
       const rawT = (time - a.time) / span;
       const eased = getEasedT(rawT, a, b);
       if (Array.isArray(a.value) && Array.isArray(b.value)) {
-        return a.value.map((v, idx) => v + (b.value[idx] - v) * eased) as T;
+        const next = b.value as number[];
+        return a.value.map((v, idx) => v + (next[idx] - v) * eased) as T;
       }
       if (typeof a.value === 'number' && typeof b.value === 'number') {
         return (a.value + (b.value - a.value) * eased) as T;
