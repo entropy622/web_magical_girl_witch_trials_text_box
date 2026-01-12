@@ -110,7 +110,7 @@ export interface LunpoCanvasHandle {
 const CHARACTER_KEYWORD = 'RefuteCutIn';
 const FINAL_KEYWORD = '\u7834\u788efinal';
 const FINAL_REVERSE_KEYWORD = '\u53cd';
-const BACKGROUND_VIDEO_URL = '/lunpo/background.webm';
+const BACKGROUND_VIDEO_URL = 'lunpo/background.webm';
 
 const isCharacterLayer = (name: string) =>
   name.includes(CHARACTER_KEYWORD) && !name.includes('StainedGlass');
@@ -245,15 +245,15 @@ const resolveAssetUrl = (layer: AeLayer) => {
   if (!name) return null;
   if (name.endsWith('.mov') || name.includes(FINAL_KEYWORD)) {
     const isReverse = name.includes(FINAL_REVERSE_KEYWORD) || layer.stretch < 0;
-    return isReverse ? '/lunpo/reverse.webm' : '/lunpo/forward.webm';
+    return isReverse ? 'lunpo/reverse.webm' : 'lunpo/forward.webm';
   }
   if (layer.source?.path) {
     const match = layer.source.path.match(/assets-[^\\/]+/);
     if (match) {
-      return `/lunpo/${match[0]}/${name}`;
+      return `lunpo/${match[0]}/${name}`;
     }
   }
-  return `/lunpo/${name}`;
+  return `lunpo/${name}`;
 };
 
 const isColorKeyLayer = (layer: AeLayer) =>
@@ -380,7 +380,7 @@ export const LunpoCanvas = forwardRef<
   );
 
   useEffect(() => {
-    fetch('/e.json')
+    fetch('e.json')
       .then((res) => res.json())
       .then((data: AeConfig) => setConfig(data))
       .catch((err) => console.error('Failed to load lunpo config', err));
@@ -674,7 +674,7 @@ export const LunpoCanvas = forwardRef<
       if (audioContext.state === 'suspended') {
         await audioContext.resume();
       }
-      const audioResponse = await fetch('/lunpo/audio.mp3');
+      const audioResponse = await fetch('lunpo/audio.mp3');
       const audioBuffer = await audioResponse.arrayBuffer();
       const decoded = await audioContext.decodeAudioData(audioBuffer);
       const source = audioContext.createBufferSource();
