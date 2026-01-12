@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { useStore } from '../../store/useStore.ts';
 
 interface RangeFieldProps {
@@ -133,6 +133,7 @@ export default function LunpoController() {
     setLunpoColorAdjust,
   } = useStore();
   const lastBlobUrlRef = useRef<string | null>(null);
+  const fileInputId = useId();
 
   useEffect(() => {
     return () => {
@@ -174,14 +175,36 @@ export default function LunpoController() {
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <img
-            src={lunpoCharacterUrl}
-            alt="角色预览"
-            className="w-20 h-20 rounded-lg border border-gray-200 object-cover bg-gray-50"
-          />
+          <label
+            htmlFor={fileInputId}
+            className="group relative w-20 h-20 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 cursor-pointer"
+            title="点击更换立绘"
+          >
+            <img
+              src={lunpoCharacterUrl}
+              alt="角色预览"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/40 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              点击更换
+            </div>
+          </label>
           <div className="flex flex-col gap-2">
-            <input type="file" accept="image/*" onChange={handleFileChange} className="text-xs" />
+            <label
+              htmlFor={fileInputId}
+              className="inline-flex items-center justify-center rounded-md border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs text-pink-600 hover:bg-pink-100 cursor-pointer"
+            >
+              上传立绘
+            </label>
+            <span className="text-xs text-gray-500">支持 PNG / WebP / JPG</span>
           </div>
+          <input
+            id={fileInputId}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
       </section>
 
