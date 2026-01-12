@@ -71,6 +71,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             仓库地址
           </a>
+          <a
+            href="https://github.com/KonshinHaoshin/webgal-mygo-terre-EM"
+            target="_blank"
+            rel="noreferrer"
+            className={'underline pl-2'}
+          >
+            魔裁WebGAL引擎
+          </a>
         </p>
       </div>
 
@@ -89,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               highlight={layoutType === 'sketchbook'}
             ></ControllerButton>
             <ControllerButton
-              text={'论破动效'}
+              text={'论破动画'}
               onClick={() => setLayoutType('lunpo')}
               highlight={layoutType === 'lunpo'}
             ></ControllerButton>
