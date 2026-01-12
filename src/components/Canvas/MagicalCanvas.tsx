@@ -6,12 +6,14 @@ import TextBoxLayer from './TextBoxLayer.tsx';
 import { getCanvasBase } from '../../data/canvas.ts';
 import SketchbookLayer from './SketchbookLayer.tsx';
 import { isMobile } from '../../utils/isMobile.ts';
+import { LunpoCanvas, LunpoCanvasHandle } from '../Lunpo/LunpoCanvas.tsx';
 
 interface MagicalCanvasProps {
   stageRef: React.RefObject<Konva.Stage | null>;
+  lunpoRef: React.RefObject<LunpoCanvasHandle | null>;
 }
 
-export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
+export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef, lunpoRef }) => {
   const { isFontLoaded, layoutType } = useStore();
 
   const CANVAS_BASE = getCanvasBase(layoutType);
@@ -105,22 +107,31 @@ export const MagicalCanvas: React.FC<MagicalCanvasProps> = ({ stageRef }) => {
           height: CANVAS_BASE.height * scale,
         }}
       >
-        <Stage
-          width={CANVAS_BASE.width * scale}
-          height={CANVAS_BASE.height * scale}
-          scaleX={scale}
-          scaleY={scale}
-          ref={stageRef}
-        >
-          {(() => {
-            switch (layoutType) {
-              case 'sketchbook':
-                return <SketchbookLayer></SketchbookLayer>;
-              case 'text_box':
-                return <TextBoxLayer></TextBoxLayer>;
-            }
-          })()}
-        </Stage>
+        {layoutType === 'lunpo' ? (
+          <LunpoCanvas
+            ref={lunpoRef}
+            width={CANVAS_BASE.width}
+            height={CANVAS_BASE.height}
+            scale={scale}
+          />
+        ) : (
+          <Stage
+            width={CANVAS_BASE.width * scale}
+            height={CANVAS_BASE.height * scale}
+            scaleX={scale}
+            scaleY={scale}
+            ref={stageRef}
+          >
+            {(() => {
+              switch (layoutType) {
+                case 'sketchbook':
+                  return <SketchbookLayer></SketchbookLayer>;
+                case 'text_box':
+                  return <TextBoxLayer></TextBoxLayer>;
+              }
+            })()}
+          </Stage>
+        )}
       </div>
     </div>
   );

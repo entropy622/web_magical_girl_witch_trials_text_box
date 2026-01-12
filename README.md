@@ -7,6 +7,7 @@
 https://github.com/oplivilqo/Text_box-of-mahoushoujo_no_majosaiban
 安安传话筒基于
 https://github.com/MarkCup-Official/Anan-s-Sketchbook-Chat-Box
+论破动画基于 <a href="https://space.bilibili.com/296330875/upload/video">东山燃灯寺</a> 老师的AE工程
 
 ## 项目简介
 利用简洁清晰的界面来生成你的魔审表情包
