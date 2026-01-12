@@ -140,21 +140,12 @@ const smoothstep = (t: number) => t * t * (3 - 2 * t);
 
 const cubicBezier = (t: number, p0: number, p1: number, p2: number, p3: number) => {
   const u = 1 - t;
-  return (
-    u * u * u * p0 +
-    3 * u * u * t * p1 +
-    3 * u * t * t * p2 +
-    t * t * t * p3
-  );
+  return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
 };
 
 const cubicBezierDerivative = (t: number, p0: number, p1: number, p2: number, p3: number) => {
   const u = 1 - t;
-  return (
-    3 * u * u * (p1 - p0) +
-    6 * u * t * (p2 - p1) +
-    3 * t * t * (p3 - p2)
-  );
+  return 3 * u * u * (p1 - p0) + 6 * u * t * (p2 - p1) + 3 * t * t * (p3 - p2);
 };
 
 const solveBezier = (x: number, x1: number, x2: number) => {
@@ -367,6 +358,8 @@ export const LunpoCanvas = forwardRef<
 >(({ width, height, scale }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement | null>(null);
+  const referenceCharacterSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const characterSizeRef = useRef<Map<string, { width: number; height: number }>>(new Map());
   const [config, setConfig] = useState<AeConfig | null>(null);
   const [layers, setLayers] = useState<PreparedLayer[]>([]);
   const [assetsReady, setAssetsReady] = useState(false);
@@ -396,6 +389,14 @@ export const LunpoCanvas = forwardRef<
 
   useEffect(() => {
     if (!config) return;
+    if (!referenceCharacterSizeRef.current) {
+      const refLayer = config.comp.layers.find((layer) => isCharacterLayer(layer.name));
+      const refWidth = refLayer?.source?.width;
+      const refHeight = refLayer?.source?.height;
+      if (refWidth && refHeight) {
+        referenceCharacterSizeRef.current = { width: refWidth, height: refHeight };
+      }
+    }
     const prepared = config.comp.layers.map((layer) => {
       const isSolid = isSolidLayer(layer);
       const isCharacter = isCharacterLayer(layer.name);
@@ -404,10 +405,7 @@ export const LunpoCanvas = forwardRef<
       const type = url?.endsWith('.webm') ? 'video' : 'image';
       const isPrecomp = layer.source?.type === 'Comp';
       const shouldSkip =
-        !url ||
-        isSolid ||
-        !isCharacter ||
-        (isPrecomp && !layer.name.includes(FINAL_KEYWORD));
+        !url || isSolid || !isCharacter || (isPrecomp && !layer.name.includes(FINAL_KEYWORD));
       const assetKey = url
         ? colorKey && type === 'image'
           ? `${url}|colorkey|${colorKey.color.join(',')}|${colorKey.tolerance}`
@@ -446,6 +444,12 @@ export const LunpoCanvas = forwardRef<
           const promise = createImage(item.url).then((img) => {
             const asset = item.colorKey ? applyColorKey(img, item.colorKey) : img;
             assetsRef.current.set(item.assetKey!, asset);
+            if (item.isCharacter) {
+              characterSizeRef.current.set(item.assetKey!, {
+                width: asset.width,
+                height: asset.height,
+              });
+            }
           });
           loadPromises.push(promise);
         } else {
@@ -477,16 +481,33 @@ export const LunpoCanvas = forwardRef<
   }, [layers]);
 
   const getLayerTransform = useCallback(
-    (layer: AeLayer, time: number, isCharacter: boolean) => {
+    (
+      layer: AeLayer,
+      time: number,
+      isCharacter: boolean,
+      characterSize?: { width: number; height: number } | null,
+      referenceSize?: { width: number; height: number } | null
+    ) => {
       const transform = layer.transform;
       const anchor = (getDimPropValue(transform?.anchorPoint, time) ?? [0, 0, 0]) as number[];
       const position = [...(getDimPropValue(transform?.position, time) ?? [0, 0, 0])] as number[];
       const scaleValue = (getDimPropValue(transform?.scale, time) ?? [100, 100, 100]) as number[];
       let rotation = getPropValue(transform?.rotation, time) ?? 0;
 
+      if (isCharacter && characterSize) {
+        anchor[0] = characterSize.width / 2;
+        anchor[1] = characterSize.height / 2;
+        anchor[2] = 0;
+      }
+
       let scaleX = scaleValue[0] / 100;
       let scaleY = scaleValue[1] / 100;
       if (isCharacter) {
+        if (characterSize && referenceSize && characterSize.height > 0) {
+          const sizeScale = referenceSize.height / characterSize.height;
+          scaleX *= sizeScale;
+          scaleY *= sizeScale;
+        }
         position[0] += lunpoTransform.offsetX;
         position[1] += lunpoTransform.offsetY;
         rotation += lunpoTransform.rotation;
@@ -550,7 +571,16 @@ export const LunpoCanvas = forwardRef<
 
           const opacity = getPropValue(layer.transform?.opacity, frameTime) ?? 100;
           const composite = getBlendMode(layer.blendMode);
-          const transform = getLayerTransform(layer, frameTime, item.isCharacter);
+          const characterSize = item.isCharacter
+            ? (characterSizeRef.current.get(item.assetKey ?? '') ?? null)
+            : null;
+          const transform = getLayerTransform(
+            layer,
+            frameTime,
+            item.isCharacter,
+            characterSize,
+            referenceCharacterSizeRef.current
+          );
 
           ctx.save();
           ctx.globalAlpha = opacity / 100;
