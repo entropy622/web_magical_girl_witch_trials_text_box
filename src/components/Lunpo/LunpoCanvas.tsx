@@ -356,7 +356,6 @@ export const LunpoCanvas = forwardRef<
   { width: number; height: number; scale: number }
 >(({ width, height, scale }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement | null>(null);
   const referenceCharacterSizeRef = useRef<{ width: number; height: number } | null>(null);
   const characterSizeRef = useRef<Map<string, { width: number; height: number }>>(new Map());
@@ -543,15 +542,8 @@ export const LunpoCanvas = forwardRef<
     (time: number) => {
       const canvas = canvasRef.current;
       if (!canvas || !config) return;
-      if (!ctxRef.current) {
-        ctxRef.current = canvas.getContext('2d', { alpha: false });
-      }
-      const ctx = ctxRef.current;
+      const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.filter = 'none';
       ctx.clearRect(0, 0, width, height);
 
       const backgroundVideo = backgroundVideoRef.current;
@@ -590,7 +582,7 @@ export const LunpoCanvas = forwardRef<
           );
 
           ctx.save();
-          ctx.globalAlpha = clamp(opacity / 100, 0, 1);
+          ctx.globalAlpha = opacity / 100;
           ctx.globalCompositeOperation = composite as GlobalCompositeOperation;
           ctx.filter = 'none';
           if (item.type === 'video') {
